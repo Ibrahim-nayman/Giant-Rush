@@ -115,5 +115,17 @@ public class PlayerController : MonoBehaviour
             Destroy(other.gameObject);
             _stickmanExtend.transform.localScale += new Vector3(0.10f,0.10f,0.10f);
         }
+        if (other.CompareTag("ColorChange(Orange)"))
+        {
+            transform.gameObject.tag = "OrangeStickman";
+        }
+        if (other.CompareTag("ColorChange(Yellow)"))
+        {
+            transform.gameObject.tag = "YellowStickman";
+        }
+        if (other.CompareTag("ColorChange(Green)"))
+        {
+            transform.gameObject.tag = "GreenStickman";
+        }
     }
 }
