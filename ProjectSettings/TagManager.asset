@@ -4,7 +4,11 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - CollectableStickman
+  - ColorYellow
+  - ColorRed
+  - YellowStickman
+  - OrangeStickman
+  - GreenStickman
   layers:
   - Default
   - TransparentFX

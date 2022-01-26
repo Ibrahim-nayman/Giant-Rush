@@ -8,8 +8,8 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: m_Platform
-  m_Shader: {fileID: 4800000, guid: ccfc7d68845db8341944b3091b59be55, type: 3}
-  m_ShaderKeywords: _MK_LIGHTMODEL_LAMBERT _MK_LIGHTTYPE_CEL_SHADE_SIMPLE
+  m_Shader: {fileID: 4800000, guid: f8d49205b3b0a644195633020367689d, type: 3}
+  m_ShaderKeywords: TCP2_DISABLE_WRAPPED_LIGHT _MK_LIGHTMODEL_LAMBERT _MK_LIGHTTYPE_CEL_SHADE_SIMPLE
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -130,12 +130,16 @@ Material:
     - _OutlineSize: 0.02
     - _Parallax: 0.02
     - _RampSmooth: 0.1
+    - _RampSmoothAdd: 0.75
     - _RampThreshold: 0.5
     - _ReflectIntensity: 0.5
     - _ReflectSmoothness: 0
     - _RimIntensity: 0.5
+    - _RimMax: 0.85
+    - _RimMin: 0.6
     - _RimSize: 1.5
     - _RimSmoothness: 0.5
+    - _RimStrength: 0.5
     - _Roughness: 1
     - _Saturation: 1
     - _ShadowIntensity: 0.36
@@ -144,9 +148,15 @@ Material:
     - _SketchToneMax: 1
     - _SketchToneMin: 0.5
     - _SmoothnessTextureChannel: 0
+    - _SpecBlend: 1
+    - _SpecSmooth: 1
     - _SpecularHighlights: 1
     - _SpecularIntensity: 0.5
     - _SrcBlend: 1
+    - _TCP2_DISABLE_WRAPPED_LIGHT: 1
+    - _TCP2_RAMPTEXT: 0
+    - _TCP2_SPEC_TOON: 0
+    - _TCP2_STYLIZED_FRESNEL: 0
     - _TranslucentIntensity: 0.5
     - _TranslucentShininess: 0.275
     - _UVSec: 0

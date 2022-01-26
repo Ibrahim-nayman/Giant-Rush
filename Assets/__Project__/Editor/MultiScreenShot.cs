@@ -23,7 +23,6 @@ namespace MultiScreenshotCaptureNamespace
 		{
 			return type.GetPropertyRecursive(property, true).GetValue(null, null);
 		}
-
 		internal static object FetchProperty(this object obj, string property)
 		{
 			return obj.GetType().GetPropertyRecursive(property, false).GetValue(obj, null);
@@ -187,7 +186,7 @@ namespace MultiScreenshotCaptureNamespace
 
 		private readonly List<CustomResolution> queuedScreenshots = new List<CustomResolution>();
 
-		[MenuItem("SilverZen/Multi Screenshots")]
+		[MenuItem("ScreenShot/Multi Screenshots")]
 		private static void Init()
 		{
 			MultiScreenshotCapture window = GetWindow<MultiScreenshotCapture>();
