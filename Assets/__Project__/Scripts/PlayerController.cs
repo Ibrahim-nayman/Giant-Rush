@@ -4,14 +4,20 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField, BoxGroup("Game Settings")] public float CharacterSpeed = 15f;
-    [SerializeField, BoxGroup("Game Settings")] private float _sideMovementSensitivity = 4f;
-    [SerializeField, BoxGroup("Game Settings")] private float _sideMovementLerpSpeed = 20f;
+    [SerializeField, BoxGroup("Game Settings")]
+    public float CharacterSpeed = 15f;
+
+    [SerializeField, BoxGroup("Game Settings")]
+    private float _sideMovementSensitivity = 4f;
+
+    [SerializeField, BoxGroup("Game Settings")]
+    private float _sideMovementLerpSpeed = 20f;
 
     [SerializeField, BoxGroup("Setup")] private Transform _sideMovementRoot;
     [SerializeField, BoxGroup("Setup")] private Transform _leftLimit, _rightLimit;
     [SerializeField, BoxGroup("Setup")] private Camera _camera;
     [SerializeField, BoxGroup("Setup")] private Transform _stickmanExtend;
+
     private Vector2 MousePositionCm
     {
         get
@@ -31,9 +37,9 @@ public class PlayerController : MonoBehaviour
     private float RightLimitX => _rightLimit.localPosition.x;
 
     private float _sideMovementTarget = 0f;
-    
+
     private bool _isCharacterInteract;
-    
+
     private void Update()
     {
         switch (GameManager.Instance.CurrentGameState)
@@ -53,7 +59,7 @@ public class PlayerController : MonoBehaviour
                 throw new ArgumentOutOfRangeException();
         }
     }
-    
+
     #region CharacterMovement
 
     private void HandleForwardMovement()
@@ -96,36 +102,47 @@ public class PlayerController : MonoBehaviour
     }
 
     #endregion
-    
-   
+
+
     public void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("YellowStickman"))
-        {
-            Destroy(other.gameObject);
-            _stickmanExtend.transform.localScale += new Vector3(-0.10f,-0.10f,-0.10f);
-        }
-        if (other.CompareTag("OrangeStickman"))
-        {
-            Destroy(other.gameObject);
-            _stickmanExtend.transform.localScale += new Vector3(-0.10f,-0.10f,-0.10f);
-        }
-        if (other.CompareTag("GreenStickman"))
-        {
-            Destroy(other.gameObject);
-            _stickmanExtend.transform.localScale += new Vector3(0.10f,0.10f,0.10f);
-        }
-        if (other.CompareTag("ColorChange(Orange)"))
+        if (other.CompareTag("ColorChangeOrange"))
         {
             transform.gameObject.tag = "OrangeStickman";
         }
-        if (other.CompareTag("ColorChange(Yellow)"))
+
+        if (other.CompareTag("ColorChangeYellow"))
         {
             transform.gameObject.tag = "YellowStickman";
         }
-        if (other.CompareTag("ColorChange(Green)"))
+
+        if (other.CompareTag("ColorChangeGreen"))
         {
             transform.gameObject.tag = "GreenStickman";
+        }
+
+        if (gameObject.CompareTag(other.tag))
+        {
+            Destroy(other.gameObject);
+            _stickmanExtend.transform.localScale += new Vector3(0.10f, 0.10f, 0.10f);
+        }
+
+        if (!gameObject.CompareTag(other.tag) && other.CompareTag("OrangeStickman"))
+        {
+            Destroy(other.gameObject);
+            _stickmanExtend.transform.localScale -= new Vector3(0.10f, 0.10f, 0.10f);
+        }
+
+        if (!gameObject.CompareTag(other.tag) && other.CompareTag("YellowStickman"))
+        {
+            Destroy(other.gameObject);
+            _stickmanExtend.transform.localScale -= new Vector3(0.10f, 0.10f, 0.10f);
+        }
+
+        if (!gameObject.CompareTag(other.tag) && other.CompareTag("GreenStickman"))
+        {
+            Destroy(other.gameObject);
+            _stickmanExtend.transform.localScale -= new Vector3(0.10f, 0.10f, 0.10f);
         }
     }
 }

@@ -9,9 +9,9 @@ TagManager:
   - YellowStickman
   - OrangeStickman
   - GreenStickman
-  - ColorChange(Yellow)
-  - ColorChange(Orange)
-  - ColorChange(Green)
+  - ColorChangeGreen
+  - ColorChangeYellow
+  - ColorChangeOrange
   layers:
   - Default
   - TransparentFX
