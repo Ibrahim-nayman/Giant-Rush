@@ -1,5 +1,6 @@
 using System;
 using NaughtyAttributes;
+using RayFire;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -17,6 +18,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField, BoxGroup("Setup")] private Transform _leftLimit, _rightLimit;
     [SerializeField, BoxGroup("Setup")] private Camera _camera;
     [SerializeField, BoxGroup("Setup")] private Transform _stickmanExtend;
+    [SerializeField, BoxGroup("Rayfire")] private RayfireRigid Rayfire;
 
     [SerializeField, BoxGroup("PlayerMaterial")]
     private Material _colorMat;
@@ -118,6 +120,10 @@ public class PlayerController : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
+        if (other.CompareTag("Wall"))
+        {
+            Rayfire.Initialize();
+        }
         if (other.CompareTag("ColorChangeOrange"))
         {
             transform.gameObject.tag = "OrangeStickman";

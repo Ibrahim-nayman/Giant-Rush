@@ -12,6 +12,7 @@ TagManager:
   - ColorChangeGreen
   - ColorChangeYellow
   - ColorChangeOrange
+  - Wall
   layers:
   - Default
   - TransparentFX
