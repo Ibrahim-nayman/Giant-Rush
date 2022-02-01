@@ -18,6 +18,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField, BoxGroup("Setup")] private Camera _camera;
     [SerializeField, BoxGroup("Setup")] private Transform _stickmanExtend;
 
+    [SerializeField, BoxGroup("PlayerMaterial")]
+    private Material _colorMat;
+
+    [SerializeField, BoxGroup("PlayerMaterial")]
+    private Color _yellowColor;
+
+    [SerializeField, BoxGroup("PlayerMaterial")]
+    private Color _greenColor;
+
+    [SerializeField, BoxGroup("PlayerMaterial")]
+    private Color _orangeColor;
+
     private Vector2 MousePositionCm
     {
         get
@@ -109,16 +121,19 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("ColorChangeOrange"))
         {
             transform.gameObject.tag = "OrangeStickman";
+            _colorMat.color = _orangeColor;
         }
 
         if (other.CompareTag("ColorChangeYellow"))
         {
             transform.gameObject.tag = "YellowStickman";
+            _colorMat.color = _yellowColor;
         }
 
         if (other.CompareTag("ColorChangeGreen"))
         {
             transform.gameObject.tag = "GreenStickman";
+            _colorMat.color = _greenColor;
         }
 
         if (gameObject.CompareTag(other.tag))

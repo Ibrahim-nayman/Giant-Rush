@@ -6,12 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/__Project__/Scenes/ManagerScene.unity
+    path: Assets/__Project__/_Scenes/ManagerScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/__Project__/Scenes/FakeElephantScene.unity
+    path: Assets/__Project__/_Scenes/FakeElephantScene.unity
     guid: 103b008a2561c854ab1f476d44f3081d
   - enabled: 1
-    path: Assets/__Project__/Scenes/Level 1.unity
+    path: Assets/__Project__/_Scenes/Level 1.unity
     guid: 1b8ee223bf8d6374fa36a391efd895e7
   m_configObjects: {}
