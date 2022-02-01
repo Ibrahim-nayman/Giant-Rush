@@ -1,6 +1,7 @@
 using System;
 using NaughtyAttributes;
 using RayFire;
+using UnityEditor.Animations;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -13,6 +14,9 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField, BoxGroup("Game Settings")]
     private float _sideMovementLerpSpeed = 20f;
+    
+    [SerializeField, BoxGroup("Animator")]
+    private Animator _animator;
 
     [SerializeField, BoxGroup("Setup")] private Transform _sideMovementRoot;
     [SerializeField, BoxGroup("Setup")] private Transform _leftLimit, _rightLimit;
@@ -59,8 +63,11 @@ public class PlayerController : MonoBehaviour
         switch (GameManager.Instance.CurrentGameState)
         {
             case GameState.BeforeStartGame:
+                _animator.SetBool("Idle",true);
                 break;
             case GameState.PlayGame:
+                _animator.SetBool("Idle",false);
+                _animator.SetBool("Run",true);
                 HandleForwardMovement();
                 HandleSideMovement();
                 HandleInput();

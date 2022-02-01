@@ -383,6 +383,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2bf6722ea2fe9364d87f9461ab98aa38, type: 3}
+--- !u!95 &921820414 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8592876449711865404, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
+  m_PrefabInstance: {fileID: 1836708993440641245}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &933861291
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -599,6 +604,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3082604655847323034, guid: 804205fc547ebc842bc991ecc9f9ce03, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3fc35673799c7ea45bd70fef3c05f85c, type: 2}
     - target: {fileID: 5445514812627599335, guid: 804205fc547ebc842bc991ecc9f9ce03, type: 3}
       propertyPath: m_Name
       value: ColorChangeYellow
@@ -1089,6 +1098,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ColorChangeOrange
       objectReference: {fileID: 0}
+    - target: {fileID: 5635666145821972191, guid: 9f9bee93381ae714e9820e398a3db157, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: fb41a7e33c0a0a54c9e405777083afd7, type: 2}
     - target: {fileID: 5728758457302109963, guid: 9f9bee93381ae714e9820e398a3db157, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1404,48 +1417,28 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 948881986}
     - target: {fileID: 1696314725, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
-      propertyPath: _colorMat
+      propertyPath: _animator
       value: 
-      objectReference: {fileID: 2100000, guid: 0bcdca085445acc4aa21304ffa02deba, type: 2}
-    - target: {fileID: 1696314725, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
-      propertyPath: _greenColor.b
-      value: 0.015686275
-      objectReference: {fileID: 0}
-    - target: {fileID: 1696314725, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
-      propertyPath: _greenColor.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1696314725, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
-      propertyPath: _greenColor.r
-      value: 0.21568628
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 921820414}
     - target: {fileID: 1696314725, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
       propertyPath: CharacterSpeed
-      value: 20
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 1696314725, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
-      propertyPath: _orangeColor.g
-      value: 0.34509805
+      propertyPath: _sideMovementLerpSpeed
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1696314725, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
-      propertyPath: _orangeColor.r
-      value: 1
+      propertyPath: _sideMovementSensitivity
+      value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: 1696314725, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
-      propertyPath: _yellowColor.b
-      value: 0.015686275
+    - target: {fileID: 1836708993440641247, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
+      propertyPath: m_UseGravity
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1696314725, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
-      propertyPath: _yellowColor.g
-      value: 0.92156863
-      objectReference: {fileID: 0}
-    - target: {fileID: 1696314725, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
-      propertyPath: _yellowColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3098875126420930665, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
-      propertyPath: m_Material
-      value: 
+    - target: {fileID: 1836708993440641247, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
+      propertyPath: m_Constraints
+      value: 126
       objectReference: {fileID: 0}
     - target: {fileID: 8592876449704432112, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
       propertyPath: m_RootOrder
@@ -1495,10 +1488,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 8592876449704463762, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
-      propertyPath: m_TagString
-      value: GreenStickman
-      objectReference: {fileID: 0}
+    - target: {fileID: 8592876449707639036, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0bcdca085445acc4aa21304ffa02deba, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
 --- !u!1001 &2229433221109825700
@@ -1617,6 +1610,10 @@ PrefabInstance:
     - target: {fileID: 9217507472329447273, guid: d6715b1982253904e86dfbc7c7516194, type: 3}
       propertyPath: m_Name
       value: Wall
+      objectReference: {fileID: 0}
+    - target: {fileID: 9217507473645890445, guid: d6715b1982253904e86dfbc7c7516194, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d6715b1982253904e86dfbc7c7516194, type: 3}
