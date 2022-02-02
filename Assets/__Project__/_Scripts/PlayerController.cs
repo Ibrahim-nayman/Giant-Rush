@@ -1,25 +1,39 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using NaughtyAttributes;
 using RayFire;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField, BoxGroup("Game Settings")] public float CharacterSpeed = 15f;
-    [SerializeField, BoxGroup("Game Settings")] private float _sideMovementSensitivity = 4f;
-    [SerializeField, BoxGroup("Game Settings")] private float _sideMovementLerpSpeed = 20f;
-    
+    [SerializeField, BoxGroup("Game Settings")]
+    public float CharacterSpeed = 15f;
+
+    [SerializeField, BoxGroup("Game Settings")]
+    private float _sideMovementSensitivity = 4f;
+
+    [SerializeField, BoxGroup("Game Settings")]
+    private float _sideMovementLerpSpeed = 20f;
+
     [SerializeField, BoxGroup("Setup")] private Transform _sideMovementRoot;
     [SerializeField, BoxGroup("Setup")] private Transform _leftLimit, _rightLimit;
     [SerializeField, BoxGroup("Setup")] private Camera _camera;
     [SerializeField, BoxGroup("Setup")] private Transform _stickmanExtend;
-    
+
     [SerializeField, BoxGroup("Animator")] private Animator _animator;
 
-    [SerializeField, BoxGroup("PlayerMaterial")] private Material _colorMat;
-    [SerializeField, BoxGroup("PlayerMaterial")] private Color _yellowColor;
-    [SerializeField, BoxGroup("PlayerMaterial")] private Color _greenColor;
-    [SerializeField, BoxGroup("PlayerMaterial")] private Color _orangeColor;
+    [SerializeField, BoxGroup("PlayerMaterial")]
+    private Material _colorMat;
+
+    [SerializeField, BoxGroup("PlayerMaterial")]
+    private Color _yellowColor;
+
+    [SerializeField, BoxGroup("PlayerMaterial")]
+    private Color _greenColor;
+
+    [SerializeField, BoxGroup("PlayerMaterial")]
+    private Color _orangeColor;
 
     private Vector2 MousePositionCm
     {
@@ -50,13 +64,12 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        RestartGame();
         switch (GameManager.Instance.CurrentGameState)
         {
             case GameState.BeforeStartGame:
-                _animator.SetBool("Idle", true);
                 break;
             case GameState.PlayGame:
-                _animator.SetBool("Idle", false);
                 _animator.SetBool("Run", true);
                 HandleForwardMovement();
                 HandleSideMovement();
@@ -119,8 +132,17 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("Wall"))
         {
-            other.GetComponent<RayfireRigid>().Initialize();
-            _animator.SetBool("Punch", true);
+            if (_stickmanExtend.transform.localScale.y * 2 >= other.gameObject.transform.parent.localScale.y)
+            {
+                other.transform.parent.GetComponentInChildren<RayfireRigid>().Initialize();
+                _animator.SetBool("Punch", true);
+                CharacterSpeed = 0;
+                StartCoroutine(WaitPunchAnim());
+            }
+            else
+            {
+                Debug.LogError("You are disconnected from your server");
+            }
         }
 
         if (other.CompareTag("ColorChangeOrange"))
@@ -182,5 +204,21 @@ public class PlayerController : MonoBehaviour
         {
             gameObject.tag = "YellowStickman";
         }
+    }
+
+    private void RestartGame()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            GameManager.Instance.LoadReachedLevel();
+            GameManager.Instance.CurrentGameState = GameState.BeforeStartGame;
+        }
+    }
+
+    private IEnumerator WaitPunchAnim()
+    {
+        yield return new WaitForSeconds(1f);
+        CharacterSpeed = 25;
+        _animator.SetBool("Punch", false);
     }
 }
