@@ -6,35 +6,23 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField, BoxGroup("Game Settings")]
-    public float CharacterSpeed = 15f;
-
-    [SerializeField, BoxGroup("Game Settings")]
-    private float _sideMovementSensitivity = 4f;
-
-    [SerializeField, BoxGroup("Game Settings")]
-    private float _sideMovementLerpSpeed = 20f;
+    [SerializeField, BoxGroup("Game Settings")] public float CharacterSpeed = 15f;
+    [SerializeField, BoxGroup("Game Settings")] private float _sideMovementSensitivity = 4f;
+    [SerializeField, BoxGroup("Game Settings")] private float _sideMovementLerpSpeed = 20f;
     
-    [SerializeField, BoxGroup("Animator")]
-    private Animator _animator;
-
     [SerializeField, BoxGroup("Setup")] private Transform _sideMovementRoot;
     [SerializeField, BoxGroup("Setup")] private Transform _leftLimit, _rightLimit;
     [SerializeField, BoxGroup("Setup")] private Camera _camera;
     [SerializeField, BoxGroup("Setup")] private Transform _stickmanExtend;
-    [SerializeField, BoxGroup("Rayfire")] private RayfireRigid Rayfire;
+    
+    [SerializeField, BoxGroup("Rayfire")] private RayfireRigid _rayfire;
 
-    [SerializeField, BoxGroup("PlayerMaterial")]
-    private Material _colorMat;
+    [SerializeField, BoxGroup("Animator")] private Animator _animator;
 
-    [SerializeField, BoxGroup("PlayerMaterial")]
-    private Color _yellowColor;
-
-    [SerializeField, BoxGroup("PlayerMaterial")]
-    private Color _greenColor;
-
-    [SerializeField, BoxGroup("PlayerMaterial")]
-    private Color _orangeColor;
+    [SerializeField, BoxGroup("PlayerMaterial")] private Material _colorMat;
+    [SerializeField, BoxGroup("PlayerMaterial")] private Color _yellowColor;
+    [SerializeField, BoxGroup("PlayerMaterial")] private Color _greenColor;
+    [SerializeField, BoxGroup("PlayerMaterial")] private Color _orangeColor;
 
     private Vector2 MousePositionCm
     {
@@ -58,16 +46,21 @@ public class PlayerController : MonoBehaviour
 
     private bool _isCharacterInteract;
 
+    private void Start()
+    {
+        SetLastTag();
+    }
+
     private void Update()
     {
         switch (GameManager.Instance.CurrentGameState)
         {
             case GameState.BeforeStartGame:
-                _animator.SetBool("Idle",true);
+                _animator.SetBool("Idle", true);
                 break;
             case GameState.PlayGame:
-                _animator.SetBool("Idle",false);
-                _animator.SetBool("Run",true);
+                _animator.SetBool("Idle", false);
+                _animator.SetBool("Run", true);
                 HandleForwardMovement();
                 HandleSideMovement();
                 HandleInput();
@@ -129,8 +122,10 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("Wall"))
         {
-            Rayfire.Initialize();
+            _rayfire.Initialize();
+            _animator.SetBool("Punch", true);
         }
+
         if (other.CompareTag("ColorChangeOrange"))
         {
             transform.gameObject.tag = "OrangeStickman";
@@ -171,6 +166,24 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(other.gameObject);
             _stickmanExtend.transform.localScale -= new Vector3(0.10f, 0.10f, 0.10f);
+        }
+    }
+
+    private void SetLastTag()
+    {
+        if (_colorMat.color == _orangeColor)
+        {
+            gameObject.tag = "OrangeStickman";
+        }
+        
+        if (_colorMat.color == _greenColor)
+        {
+            gameObject.tag = "GreenStickman";
+        }
+        
+        if (_colorMat.color == _yellowColor)
+        {
+            gameObject.tag = "YellowStickman";
         }
     }
 }
