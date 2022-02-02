@@ -1,7 +1,6 @@
 using System;
 using NaughtyAttributes;
 using RayFire;
-using UnityEditor.Animations;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -15,8 +14,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField, BoxGroup("Setup")] private Camera _camera;
     [SerializeField, BoxGroup("Setup")] private Transform _stickmanExtend;
     
-    [SerializeField, BoxGroup("Rayfire")] private RayfireRigid _rayfire;
-
     [SerializeField, BoxGroup("Animator")] private Animator _animator;
 
     [SerializeField, BoxGroup("PlayerMaterial")] private Material _colorMat;
@@ -122,7 +119,7 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("Wall"))
         {
-            _rayfire.Initialize();
+            other.GetComponent<RayfireRigid>().Initialize();
             _animator.SetBool("Punch", true);
         }
 
@@ -175,12 +172,12 @@ public class PlayerController : MonoBehaviour
         {
             gameObject.tag = "OrangeStickman";
         }
-        
+
         if (_colorMat.color == _greenColor)
         {
             gameObject.tag = "GreenStickman";
         }
-        
+
         if (_colorMat.color == _yellowColor)
         {
             gameObject.tag = "YellowStickman";
