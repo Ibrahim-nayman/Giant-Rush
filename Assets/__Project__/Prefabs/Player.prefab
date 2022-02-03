@@ -608,7 +608,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5de12b82d621904787d4f6fd9069128, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterSpeed: 20
+  CharacterSpeed: 15
   _sideMovementSensitivity: 5
   _sideMovementLerpSpeed: 10
   _sideMovementRoot: {fileID: 3427810006634709803}
@@ -616,6 +616,7 @@ MonoBehaviour:
   _rightLimit: {fileID: 5003547705232043459}
   _camera: {fileID: 1147814931}
   _stickmanExtend: {fileID: 424287450139412089}
+  _rayfire: {fileID: 0}
   _animator: {fileID: 8592876449711865404}
   _colorMat: {fileID: 2100000, guid: 0bcdca085445acc4aa21304ffa02deba, type: 2}
   _yellowColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 0}
