@@ -3,7 +3,6 @@ using System.Collections;
 using NaughtyAttributes;
 using RayFire;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -49,11 +48,12 @@ public class PlayerController : MonoBehaviour
     {
         SetLastTag();
     }
+    #region GameState
 
     private void Update()
     {
         RestartGame();
-        
+
         switch (GameManager.Instance.CurrentGameState)
         {
             case GameState.BeforeStartGame:
@@ -65,7 +65,7 @@ public class PlayerController : MonoBehaviour
                 HandleInput();
                 break;
             case GameState.WinGame:
-                _animator.SetBool("Run",false);
+                _animator.SetBool("Run", false);
                 break;
             case GameState.LoseGame:
                 break;
@@ -73,6 +73,7 @@ public class PlayerController : MonoBehaviour
                 throw new ArgumentOutOfRangeException();
         }
     }
+    #endregion
 
     #region CharacterMovement
 
@@ -120,11 +121,14 @@ public class PlayerController : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
+        #region Obstacle
+
         if (other.CompareTag("Obstacle"))
-        { 
-            _animator.SetBool(" Death",true);
+        {
+            _animator.SetBool(" Death", true);
             GameManager.Instance.CurrentGameState = GameState.LoseGame;
         }
+
         if (other.CompareTag("Wall"))
         {
             if (_stickmanExtend.transform.localScale.y * 2 >= other.gameObject.transform.parent.localScale.y)
@@ -139,6 +143,10 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("You are disconnected from your server");
             }
         }
+
+        #endregion
+
+        #region ColorChange
 
         if (other.CompareTag("ColorChangeOrange"))
         {
@@ -157,6 +165,10 @@ public class PlayerController : MonoBehaviour
             transform.gameObject.tag = "GreenStickman";
             _colorMat.color = _greenColor;
         }
+
+        #endregion
+
+        #region StickmanExtend
 
         if (gameObject.CompareTag(other.tag))
         {
@@ -181,8 +193,10 @@ public class PlayerController : MonoBehaviour
             Destroy(other.gameObject);
             _stickmanExtend.transform.localScale -= new Vector3(0.10f, 0.10f, 0.10f);
         }
-    }
 
+        #endregion
+    }
+    #region SetLastTag
     private void SetLastTag()
     {
         if (_colorMat.color == _orangeColor)
@@ -200,7 +214,7 @@ public class PlayerController : MonoBehaviour
             gameObject.tag = "YellowStickman";
         }
     }
-
+    #endregion
     private void RestartGame()
     {
         if (Input.GetKeyDown(KeyCode.P))
@@ -214,6 +228,6 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         CharacterSpeed = 25;
-        _animator.SetBool("Punch",false);
+        _animator.SetBool("Punch", false);
     }
 }
