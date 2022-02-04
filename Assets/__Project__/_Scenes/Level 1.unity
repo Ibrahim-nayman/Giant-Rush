@@ -7392,6 +7392,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 631297384}
     m_Modifications:
+    - target: {fileID: 1143563311334160858, guid: 703b3d19bec5d3a488c04ee354498559, type: 3}
+      propertyPath: m_TagString
+      value: Obstacle
+      objectReference: {fileID: 0}
     - target: {fileID: 2418815394099209117, guid: 703b3d19bec5d3a488c04ee354498559, type: 3}
       propertyPath: m_Name
       value: Patrol Saw
@@ -7717,6 +7721,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 631297384}
     m_Modifications:
+    - target: {fileID: 1659211914902833373, guid: 4335b8a30175dc048878fc9f72a7ed0b, type: 3}
+      propertyPath: m_TagString
+      value: Obstacle
+      objectReference: {fileID: 0}
     - target: {fileID: 6934473257679711482, guid: 4335b8a30175dc048878fc9f72a7ed0b, type: 3}
       propertyPath: m_Name
       value: Hammer
@@ -8038,6 +8046,10 @@ PrefabInstance:
       propertyPath: _rayfire
       value: 
       objectReference: {fileID: 948881986}
+    - target: {fileID: 1696314725, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
+      propertyPath: CharacterSpeed
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 8592876449704432112, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
       propertyPath: m_RootOrder
       value: 3

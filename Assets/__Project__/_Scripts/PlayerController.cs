@@ -1,13 +1,15 @@
 using System;
+using System.Collections;
 using NaughtyAttributes;
 using RayFire;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField, BoxGroup("Game Settings")] public float CharacterSpeed = 15f;
-    [SerializeField, BoxGroup("Game Settings")] private float _sideMovementSensitivity = 4f;
-    [SerializeField, BoxGroup("Game Settings")] private float _sideMovementLerpSpeed = 20f;
+    [SerializeField, BoxGroup("Game Settings")] public float CharacterSpeed = 25f;
+    [SerializeField, BoxGroup("Game Settings")] private float _sideMovementSensitivity = 5f;
+    [SerializeField, BoxGroup("Game Settings")] private float _sideMovementLerpSpeed = 10f;
     
     [SerializeField, BoxGroup("Setup")] private Transform _sideMovementRoot;
     [SerializeField, BoxGroup("Setup")] private Transform _leftLimit, _rightLimit;
@@ -50,19 +52,20 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        RestartGame();
+        
         switch (GameManager.Instance.CurrentGameState)
         {
             case GameState.BeforeStartGame:
-                _animator.SetBool("Idle", true);
                 break;
             case GameState.PlayGame:
-                _animator.SetBool("Idle", false);
                 _animator.SetBool("Run", true);
                 HandleForwardMovement();
                 HandleSideMovement();
                 HandleInput();
                 break;
             case GameState.WinGame:
+                _animator.SetBool("Run",false);
                 break;
             case GameState.LoseGame:
                 break;
@@ -117,10 +120,24 @@ public class PlayerController : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
+        if (other.CompareTag("Obstacle"))
+        { 
+            _animator.SetBool(" Death",true);
+            GameManager.Instance.CurrentGameState = GameState.LoseGame;
+        }
         if (other.CompareTag("Wall"))
         {
-            other.GetComponent<RayfireRigid>().Initialize();
-            _animator.SetBool("Punch", true);
+            if (_stickmanExtend.transform.localScale.y * 2 >= other.gameObject.transform.parent.localScale.y)
+            {
+                other.transform.parent.GetComponentInChildren<RayfireRigid>().Initialize();
+                _animator.SetBool("Punch", true);
+                CharacterSpeed = 0;
+                StartCoroutine(WaitPunchAnim());
+            }
+            else
+            {
+                Debug.Log("You are disconnected from your server");
+            }
         }
 
         if (other.CompareTag("ColorChangeOrange"))
@@ -182,5 +199,21 @@ public class PlayerController : MonoBehaviour
         {
             gameObject.tag = "YellowStickman";
         }
+    }
+
+    private void RestartGame()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            GameManager.Instance.LoadReachedLevel();
+            GameManager.Instance.CurrentGameState = GameState.BeforeStartGame;
+        }
+    }
+
+    private IEnumerator WaitPunchAnim()
+    {
+        yield return new WaitForSeconds(1f);
+        CharacterSpeed = 25;
+        _animator.SetBool("Punch",false);
     }
 }
