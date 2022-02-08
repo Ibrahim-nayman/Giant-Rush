@@ -205,6 +205,12 @@ public class PlayerController : MonoBehaviour
 
         #endregion
         
+        if (other.CompareTag("Diamond"))
+        {
+            Destroy(other.gameObject);
+            DiamondCounter.Value += 1;
+        }
+        
     }
     #region SetLastTag
     private void SetLastTag()
