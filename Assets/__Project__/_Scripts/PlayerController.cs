@@ -3,9 +3,12 @@ using System.Collections;
 using NaughtyAttributes;
 using RayFire;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField, BoxGroup("Game Settings")] public int CharacterHP= 0;
     [SerializeField, BoxGroup("Game Settings")] public float CharacterSpeed = 25f;
     [SerializeField, BoxGroup("Game Settings")] private float _sideMovementSensitivity = 5f;
     [SerializeField, BoxGroup("Game Settings")] private float _sideMovementLerpSpeed = 10f;
@@ -126,7 +129,7 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Obstacle"))
         {
             _animator.SetBool(" Death", true);
-            GameManager.Instance.CurrentGameState = GameState.LoseGame;
+            GameManager.Instance.CurrentGameState = GameState.BeforeStartGame; // lose game olarak ayarlanıcaktır.
         }
 
         if (other.CompareTag("Wall"))
@@ -137,6 +140,7 @@ public class PlayerController : MonoBehaviour
                 _animator.SetBool("Punch", true);
                 CharacterSpeed = 0;
                 StartCoroutine(WaitPunchAnim());
+                CharacterHP -= 30;
             }
             else
             {
@@ -174,27 +178,33 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(other.gameObject);
             _stickmanExtend.transform.localScale += new Vector3(0.10f, 0.10f, 0.10f);
+            CharacterHP += 10;
+            ScoreCounter.scoreValue += 1;
         }
 
         if (!gameObject.CompareTag(other.tag) && other.CompareTag("OrangeStickman"))
         {
             Destroy(other.gameObject);
             _stickmanExtend.transform.localScale -= new Vector3(0.10f, 0.10f, 0.10f);
+            CharacterHP -= 10;
         }
 
         if (!gameObject.CompareTag(other.tag) && other.CompareTag("YellowStickman"))
         {
             Destroy(other.gameObject);
             _stickmanExtend.transform.localScale -= new Vector3(0.10f, 0.10f, 0.10f);
+            CharacterHP -= 10;
         }
 
         if (!gameObject.CompareTag(other.tag) && other.CompareTag("GreenStickman"))
         {
             Destroy(other.gameObject);
             _stickmanExtend.transform.localScale -= new Vector3(0.10f, 0.10f, 0.10f);
+            CharacterHP -= 10;
         }
 
         #endregion
+        
     }
     #region SetLastTag
     private void SetLastTag()

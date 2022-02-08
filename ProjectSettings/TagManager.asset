@@ -14,6 +14,7 @@ TagManager:
   - ColorChangeOrange
   - Wall
   - Obstacle
+  - Diamond
   layers:
   - Default
   - TransparentFX
