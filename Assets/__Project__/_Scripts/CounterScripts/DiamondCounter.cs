@@ -4,16 +4,15 @@ using UnityEngine;
 public class DiamondCounter : MonoBehaviour
 {
     public static int Value = 0;
-    public TextMeshProUGUI score;
+    public TextMeshProUGUI Score;
 
-    void Start()
+    private void Start()
     {
-        score = GetComponent<TextMeshProUGUI>();
+        Score = GetComponent<TextMeshProUGUI>();
     }
 
-    void Update()
+    private void Update()
     {
-        
-        score.text = "" + Value;
+        Score.text = "" + Value;
     }
 }

@@ -1,29 +1,37 @@
 using System;
 using System.Collections;
+using System.Numerics;
 using NaughtyAttributes;
 using RayFire;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
-using UnityEngine.UI;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField, BoxGroup("Game Settings")] public int CharacterHP= 0;
+    [SerializeField, BoxGroup("Game Settings")] public float CharacterHealth = 2f;
     [SerializeField, BoxGroup("Game Settings")] public float CharacterSpeed = 25f;
+    [SerializeField, BoxGroup("Game Settings")] private Vector3 _heightValue = new Vector3(0.1f,0.1f,0.1f);
     [SerializeField, BoxGroup("Game Settings")] private float _sideMovementSensitivity = 5f;
     [SerializeField, BoxGroup("Game Settings")] private float _sideMovementLerpSpeed = 10f;
-    
+
     [SerializeField, BoxGroup("Setup")] private Transform _sideMovementRoot;
     [SerializeField, BoxGroup("Setup")] private Transform _leftLimit, _rightLimit;
     [SerializeField, BoxGroup("Setup")] private Camera _camera;
     [SerializeField, BoxGroup("Setup")] private Transform _stickmanExtend;
-    
-    [SerializeField, BoxGroup("Animator")] private Animator _animator;
 
-    [SerializeField, BoxGroup("PlayerMaterial")] private Material _colorMat;
-    [SerializeField, BoxGroup("PlayerMaterial")] private Color _yellowColor;
-    [SerializeField, BoxGroup("PlayerMaterial")] private Color _greenColor;
-    [SerializeField, BoxGroup("PlayerMaterial")] private Color _orangeColor;
+    [SerializeField, BoxGroup("Player Animator")] private Animator _animator;
+
+    [SerializeField, BoxGroup("Enemy Animator")] private Animator _enemyAnimator;
+
+    [SerializeField, BoxGroup("Player Material")] private Material _colorMat;
+    [SerializeField, BoxGroup("Player Material")] private Color _yellowColor;
+    [SerializeField, BoxGroup("Player Material")] private Color _greenColor;
+    [SerializeField, BoxGroup("Player Material")] private Color _orangeColor;
+
+    [SerializeField, BoxGroup("Stickman Image")] private GameObject _greenStickmanImage;
+    [SerializeField, BoxGroup("Stickman Image")] private GameObject _orangeStickmanImage;
+    [SerializeField, BoxGroup("Stickman Image")] private GameObject _yellowStickmanImage;
 
     private Vector2 MousePositionCm
     {
@@ -40,42 +48,55 @@ public class PlayerController : MonoBehaviour
     private Vector2 _inputDrag;
 
     private Vector2 _previousMousePosition;
+    
     private float LeftLimitX => _leftLimit.localPosition.x;
     private float RightLimitX => _rightLimit.localPosition.x;
 
     private float _sideMovementTarget = 0f;
-
+    
     private bool _isCharacterInteract;
+    private bool _isFirstRunStarted;
+    private bool _isFirstBoxingIdle;
 
     private void Start()
     {
+        DiamondCounter.Value = 0;
+        ScoreCounter.ScoreValue = 0;
         SetLastTag();
     }
+
     #region GameState
 
     private void Update()
     {
         RestartGame();
-
+        
         switch (GameManager.Instance.CurrentGameState)
         {
             case GameState.BeforeStartGame:
+                IdleAnimation();
                 break;
             case GameState.PlayGame:
-                _animator.SetBool("Run", true);
+                FirstRunAnimation();
                 HandleForwardMovement();
                 HandleSideMovement();
                 HandleInput();
+                CharacterMaxHpAndExtend();
+                break;
+            case GameState.FightGame:
+                FightGameState();
                 break;
             case GameState.WinGame:
-                _animator.SetBool("Run", false);
+                WinAnimation();
                 break;
             case GameState.LoseGame:
+                DeathAnimation();
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
     }
+
     #endregion
 
     #region CharacterMovement
@@ -124,27 +145,31 @@ public class PlayerController : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
+        if (other.CompareTag("FightLine"))
+        {
+            GameManager.Instance.CurrentGameState = GameState.FightGame;
+        }
+
         #region Obstacle
 
         if (other.CompareTag("Obstacle"))
         {
-            _animator.SetBool(" Death", true);
-            GameManager.Instance.CurrentGameState = GameState.BeforeStartGame; // lose game olarak ayarlanıcaktır.
+            GameManager.Instance.LoadReachedLevel();
+            GameManager.Instance.CurrentGameState = GameState.BeforeStartGame;
+            //TODO Ölüm animasyonu koyulacak ve retry tuşuna basınca yukarıdaki kodlar çalışacak.
         }
 
         if (other.CompareTag("Wall"))
         {
-            if (_stickmanExtend.transform.localScale.y * 2 >= other.gameObject.transform.parent.localScale.y)
+            if (CharacterHealth > 4f)
             {
-                other.transform.parent.GetComponentInChildren<RayfireRigid>().Initialize();
-                _animator.SetBool("Punch", true);
-                CharacterSpeed = 0;
-                StartCoroutine(WaitPunchAnim());
-                CharacterHP -= 30;
+                StartCoroutine(WallPunch(other));
             }
             else
             {
-                Debug.Log("You are disconnected from your server");
+                GameManager.Instance.LoadReachedLevel();
+                GameManager.Instance.CurrentGameState = GameState.BeforeStartGame;
+                //TODO Ölüm animasyonu koyulacak ve retry tuşuna basınca yukarıdaki kodlar çalışacak.
             }
         }
 
@@ -156,18 +181,27 @@ public class PlayerController : MonoBehaviour
         {
             transform.gameObject.tag = "OrangeStickman";
             _colorMat.color = _orangeColor;
+            _greenStickmanImage.SetActive(false);
+            _orangeStickmanImage.SetActive(true);
+            _yellowStickmanImage.SetActive(false);
         }
 
         if (other.CompareTag("ColorChangeYellow"))
         {
             transform.gameObject.tag = "YellowStickman";
             _colorMat.color = _yellowColor;
+            _greenStickmanImage.SetActive(false);
+            _orangeStickmanImage.SetActive(false);
+            _yellowStickmanImage.SetActive(true);
         }
 
         if (other.CompareTag("ColorChangeGreen"))
         {
             transform.gameObject.tag = "GreenStickman";
             _colorMat.color = _greenColor;
+            _greenStickmanImage.SetActive(true);
+            _orangeStickmanImage.SetActive(false);
+            _yellowStickmanImage.SetActive(false);
         }
 
         #endregion
@@ -176,61 +210,73 @@ public class PlayerController : MonoBehaviour
 
         if (gameObject.CompareTag(other.tag))
         {
-            Destroy(other.gameObject);
-            _stickmanExtend.transform.localScale += new Vector3(0.10f, 0.10f, 0.10f);
-            CharacterHP += 10;
-            ScoreCounter.scoreValue += 1;
+            other.gameObject.SetActive(false);
+            CharacterHealth += 0.1f;
+            _stickmanExtend.transform.localScale += _heightValue;
+            ScoreCounter.ScoreValue += 1;
         }
 
         if (!gameObject.CompareTag(other.tag) && other.CompareTag("OrangeStickman"))
         {
-            Destroy(other.gameObject);
-            _stickmanExtend.transform.localScale -= new Vector3(0.10f, 0.10f, 0.10f);
-            CharacterHP -= 10;
+            other.gameObject.SetActive(false);
+            CharacterHealth -= 0.1f;
+            _stickmanExtend.transform.localScale -= _heightValue;
         }
 
         if (!gameObject.CompareTag(other.tag) && other.CompareTag("YellowStickman"))
         {
-            Destroy(other.gameObject);
-            _stickmanExtend.transform.localScale -= new Vector3(0.10f, 0.10f, 0.10f);
-            CharacterHP -= 10;
+            other.gameObject.SetActive(false);
+            CharacterHealth -= 0.1f;
+            _stickmanExtend.transform.localScale -= _heightValue;
         }
 
         if (!gameObject.CompareTag(other.tag) && other.CompareTag("GreenStickman"))
         {
-            Destroy(other.gameObject);
-            _stickmanExtend.transform.localScale -= new Vector3(0.10f, 0.10f, 0.10f);
-            CharacterHP -= 10;
+            other.gameObject.SetActive(false);
+            CharacterHealth -= 0.1f;
+            _stickmanExtend.transform.localScale -= _heightValue;
         }
 
         #endregion
-        
+
         if (other.CompareTag("Diamond"))
         {
-            Destroy(other.gameObject);
+            other.gameObject.SetActive(false);
             DiamondCounter.Value += 1;
         }
-        
     }
+
     #region SetLastTag
+
     private void SetLastTag()
     {
         if (_colorMat.color == _orangeColor)
         {
             gameObject.tag = "OrangeStickman";
+            _greenStickmanImage.SetActive(false);
+            _orangeStickmanImage.SetActive(true);
+            _yellowStickmanImage.SetActive(false);
         }
 
         if (_colorMat.color == _greenColor)
         {
             gameObject.tag = "GreenStickman";
+            _greenStickmanImage.SetActive(true);
+            _orangeStickmanImage.SetActive(false);
+            _yellowStickmanImage.SetActive(false);
         }
 
         if (_colorMat.color == _yellowColor)
         {
             gameObject.tag = "YellowStickman";
+            _greenStickmanImage.SetActive(false);
+            _orangeStickmanImage.SetActive(false);
+            _yellowStickmanImage.SetActive(true);
         }
     }
+
     #endregion
+
     private void RestartGame()
     {
         if (Input.GetKeyDown(KeyCode.P))
@@ -240,10 +286,100 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private IEnumerator WaitPunchAnim()
+    private IEnumerator WallPunch(Collider other)
     {
-        yield return new WaitForSeconds(1f);
+        CharacterSpeed = 0f;
+        PunchAnimation();
+        yield return new WaitForSeconds(0.75f);
+        other.transform.parent.GetComponentInChildren<RayfireRigid>().Initialize();
         CharacterSpeed = 25;
+        CharacterHealth -= 1;
+        RunAfterWallAnimation();
+    }
+
+    private IEnumerator FightPunchDelay()
+    {
+        PunchAnimation();
+        yield return new WaitForSeconds(1.2f);
+        BoxingIdle();
+    }
+
+    private void CharacterMaxHpAndExtend()
+    {
+        if (_stickmanExtend.localScale.y <= 2f)
+        {
+            _stickmanExtend.localScale = new Vector3(2f, 2f, 2f);
+            CharacterHealth = 2f;
+        }
+
+        if (_stickmanExtend.localScale.y >= 5f)
+        {
+            _stickmanExtend.localScale = new Vector3(5f, 5f, 5f);
+            CharacterHealth = 5f;
+        }
+    }
+
+    public void FightGameState()
+    {
+        CharacterSpeed = 0;
+        _isCharacterInteract = true;
+
+        if (!_isFirstBoxingIdle)
+        {
+            _isFirstBoxingIdle = true;
+            BoxingIdle();
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            StartCoroutine(FightPunchDelay());
+        }
+    }
+    
+    private void IdleAnimation()
+    {
+        _animator.SetBool("Idle", true);
+        _animator.SetBool("Run", false);
+    }
+
+    private void RunAfterWallAnimation()
+    {
+        _animator.SetBool("Run", true);
+        _animator.SetBool("Idle", false);
         _animator.SetBool("Punch", false);
+    }
+    
+    private void FirstRunAnimation()
+    {
+        if (!_isFirstRunStarted)
+        {
+            _isFirstRunStarted = true;
+            _animator.SetBool("Run", true);
+            _animator.SetBool("Idle", false);
+        }
+    }
+
+    private void DeathAnimation()
+    {
+        _animator.SetBool("Death", true);
+    }
+
+    private void WinAnimation()
+    {
+        _animator.SetBool("Win", true);
+    }
+
+    private void PunchAnimation()
+    {
+        _animator.SetBool("Punch", true);
+        _animator.SetBool("Run", false);
+        _animator.SetBool("BoxingIdle", false);
+    }
+
+    private void BoxingIdle()
+    {
+        _animator.SetBool("BoxingIdle", true);
+        _animator.SetBool("Punch", false);
+        _animator.SetBool("Run", false);
     }
 }

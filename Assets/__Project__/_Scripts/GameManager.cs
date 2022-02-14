@@ -9,6 +9,7 @@ public enum GameState
 {
     BeforeStartGame,
     PlayGame,
+    FightGame,
     WinGame,
     LoseGame
 }

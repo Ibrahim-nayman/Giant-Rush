@@ -3,16 +3,16 @@ using UnityEngine;
 
 public class ScoreCounter : MonoBehaviour
 {
-    public static int scoreValue = 0;
-    public TextMeshProUGUI score;
+    public static int ScoreValue = 0;
+    public TextMeshProUGUI Score;
 
-    void Start()
+    private void Start()
     {
-        score = GetComponent<TextMeshProUGUI>();
+        Score = GetComponent<TextMeshProUGUI>();
     }
 
-    void Update()
+    private void Update()
     {
-        score.text = "" + scoreValue;
+        Score.text = "" + ScoreValue;
     }
 }

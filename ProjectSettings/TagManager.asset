@@ -15,6 +15,7 @@ TagManager:
   - Wall
   - Obstacle
   - Diamond
+  - FightLine
   layers:
   - Default
   - TransparentFX

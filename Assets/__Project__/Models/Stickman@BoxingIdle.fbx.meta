@@ -1,215 +1,14 @@
 fileFormatVersion: 2
-guid: fa7f36c71b9e8fa4798df3a931c2fd92
+guid: cb42a70474904f84fabf71ab67035e5f
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable:
   - first:
-      1: 100000
-    second: calf_l
-  - first:
-      1: 100002
-    second: calf_r
-  - first:
-      1: 100004
-    second: clavicle_l
-  - first:
-      1: 100006
-    second: clavicle_r
-  - first:
-      1: 100008
-    second: foot_l
-  - first:
-      1: 100010
-    second: foot_r
-  - first:
-      1: 100012
-    second: hand_l
-  - first:
-      1: 100014
-    second: hand_r
-  - first:
-      1: 100016
-    second: head
-  - first:
-      1: 100018
-    second: index_01_l
-  - first:
-      1: 100020
-    second: index_01_r
-  - first:
-      1: 100022
-    second: index_02_l
-  - first:
-      1: 100024
-    second: index_02_r
-  - first:
-      1: 100026
-    second: lowerarm_l
-  - first:
-      1: 100028
-    second: lowerarm_r
-  - first:
-      1: 100030
-    second: neck_01
-  - first:
-      1: 100032
-    second: pelvis
-  - first:
-      1: 100034
-    second: root
-  - first:
-      1: 100036
-    second: Skelet.c
-  - first:
-      1: 100038
-    second: spine_01
-  - first:
-      1: 100040
-    second: spine_02
-  - first:
-      1: 100042
-    second: spine_03
-  - first:
-      1: 100044
-    second: Stickman_heads_sphere
-  - first:
-      1: 100046
-    second: //RootNode
-  - first:
-      1: 100048
-    second: thigh_l
-  - first:
-      1: 100050
-    second: thigh_r
-  - first:
-      1: 100052
-    second: thumb_01_l
-  - first:
-      1: 100054
-    second: thumb_01_r
-  - first:
-      1: 100056
-    second: thumb_02_l
-  - first:
-      1: 100058
-    second: thumb_02_r
-  - first:
-      1: 100060
-    second: upperarm_l
-  - first:
-      1: 100062
-    second: upperarm_r
-  - first:
-      4: 400000
-    second: calf_l
-  - first:
-      4: 400002
-    second: calf_r
-  - first:
-      4: 400004
-    second: clavicle_l
-  - first:
-      4: 400006
-    second: clavicle_r
-  - first:
-      4: 400008
-    second: foot_l
-  - first:
-      4: 400010
-    second: foot_r
-  - first:
-      4: 400012
-    second: hand_l
-  - first:
-      4: 400014
-    second: hand_r
-  - first:
-      4: 400016
-    second: head
-  - first:
-      4: 400018
-    second: index_01_l
-  - first:
-      4: 400020
-    second: index_01_r
-  - first:
-      4: 400022
-    second: index_02_l
-  - first:
-      4: 400024
-    second: index_02_r
-  - first:
-      4: 400026
-    second: lowerarm_l
-  - first:
-      4: 400028
-    second: lowerarm_r
-  - first:
-      4: 400030
-    second: neck_01
-  - first:
-      4: 400032
-    second: pelvis
-  - first:
-      4: 400034
-    second: root
-  - first:
-      4: 400036
-    second: Skelet.c
-  - first:
-      4: 400038
-    second: spine_01
-  - first:
-      4: 400040
-    second: spine_02
-  - first:
-      4: 400042
-    second: spine_03
-  - first:
-      4: 400044
-    second: //RootNode
-  - first:
-      4: 400046
-    second: Stickman_heads_sphere
-  - first:
-      4: 400048
-    second: thigh_l
-  - first:
-      4: 400050
-    second: thigh_r
-  - first:
-      4: 400052
-    second: thumb_01_l
-  - first:
-      4: 400054
-    second: thumb_01_r
-  - first:
-      4: 400056
-    second: thumb_02_l
-  - first:
-      4: 400058
-    second: thumb_02_r
-  - first:
-      4: 400060
-    second: upperarm_l
-  - first:
-      4: 400062
-    second: upperarm_r
-  - first:
-      21: 2100000
-    second: No Name
-  - first:
-      43: 4300000
-    second: Stickman_heads_sphere
-  - first:
-      95: 9500000
-    second: //RootNode
-  - first:
-      137: 13700000
-    second: Stickman_heads_sphere
+      74: -203655887218126122
+    second: BoxingIdle
   externalObjects: {}
   materials:
-    materialImportMode: 1
+    materialImportMode: 2
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -234,8 +33,37 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
-    isReadable: 1
+    clipAnimations:
+    - serializedVersion: 16
+      name: BoxingIdle
+      takeName: mixamo.com
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 66
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 0
   meshes:
     lODScreenPercentages: []
     globalScale: 1
@@ -247,7 +75,7 @@ ModelImporter:
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
-    fileIdsGeneration: 1
+    fileIdsGeneration: 2
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
@@ -263,7 +91,7 @@ ModelImporter:
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
-    secondaryUVMarginMethod: 0
+    secondaryUVMarginMethod: 1
     secondaryUVMinLightmapResolution: 40
     secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
@@ -276,14 +104,7 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
-  referencedClips:
-  - cb42a70474904f84fabf71ab67035e5f
-  - 4e3c1fe02991fcd499e45268d887cb05
-  - 491c47dbccfff9549937b90ccb09451d
-  - 69edf459481261a428336075fab4242d
-  - 8c8bd82bcd4226040b0fb3e6625645c0
-  - 98a9f33037a74d342a2250c39d6a24e7
-  - a7980cf56d6c69c44b63452fd8ab878d
+  referencedClips: []
   importAnimation: 1
   humanDescription:
     serializedVersion: 3
@@ -685,12 +506,12 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: fa7f36c71b9e8fa4798df3a931c2fd92, type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
-  avatarSetup: 1
-  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  avatarSetup: 2
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
