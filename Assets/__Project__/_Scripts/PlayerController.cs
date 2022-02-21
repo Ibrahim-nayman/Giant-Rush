@@ -366,6 +366,7 @@ public class PlayerController : MonoBehaviour
         if (EnemyHealth <= 0)
         {
             StartCoroutine(EnemyDeathDelay());
+            WinAnimation();
         }
 
         if (CharacterHealth <= 0)
@@ -413,6 +414,7 @@ public class PlayerController : MonoBehaviour
     private void WinAnimation()
     {
         _animator.SetBool("Win", true);
+        _animator.SetBool("BoxingIdle", false);
     }
 
     private void PunchAnimation()
