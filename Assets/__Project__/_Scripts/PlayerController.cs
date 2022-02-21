@@ -4,12 +4,16 @@ using System.Numerics;
 using NaughtyAttributes;
 using RayFire;
 using UnityEngine;
+using UnityEngine.UIElements;
+using Quaternion = UnityEngine.Quaternion;
+using Random = System.Random;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField, BoxGroup("Game Settings")] public float CharacterHealth = 2f;
+    [SerializeField, BoxGroup("Game Settings")] public float EnemyHealth = 2f;
     [SerializeField, BoxGroup("Game Settings")] public float CharacterSpeed = 25f;
     [SerializeField, BoxGroup("Game Settings")] private Vector3 _heightValue = new Vector3(0.1f,0.1f,0.1f);
     [SerializeField, BoxGroup("Game Settings")] private float _sideMovementSensitivity = 5f;
@@ -18,6 +22,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField, BoxGroup("Setup")] private Transform _sideMovementRoot;
     [SerializeField, BoxGroup("Setup")] private Transform _leftLimit, _rightLimit;
     [SerializeField, BoxGroup("Setup")] private Camera _camera;
+    [SerializeField, BoxGroup("Setup")] private GameObject _fightCamera;
     [SerializeField, BoxGroup("Setup")] private Transform _stickmanExtend;
 
     [SerializeField, BoxGroup("Player Animator")] private Animator _animator;
@@ -90,7 +95,7 @@ public class PlayerController : MonoBehaviour
                 WinAnimation();
                 break;
             case GameState.LoseGame:
-                DeathAnimation();
+                StartCoroutine(DeathDelay());
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -154,21 +159,19 @@ public class PlayerController : MonoBehaviour
 
         if (other.CompareTag("Obstacle"))
         {
-            GameManager.Instance.LoadReachedLevel();
-            GameManager.Instance.CurrentGameState = GameState.BeforeStartGame;
+            StartCoroutine(DeathDelay());
             //TODO Ölüm animasyonu koyulacak ve retry tuşuna basınca yukarıdaki kodlar çalışacak.
         }
 
         if (other.CompareTag("Wall"))
         {
-            if (CharacterHealth > 4f)
+            if (CharacterHealth > 3f)
             {
                 StartCoroutine(WallPunch(other));
             }
             else
             {
-                GameManager.Instance.LoadReachedLevel();
-                GameManager.Instance.CurrentGameState = GameState.BeforeStartGame;
+                GameManager.Instance.CurrentGameState = GameState.LoseGame;
                 //TODO Ölüm animasyonu koyulacak ve retry tuşuna basınca yukarıdaki kodlar çalışacak.
             }
         }
@@ -304,6 +307,29 @@ public class PlayerController : MonoBehaviour
         BoxingIdle();
     }
 
+    private IEnumerator EnemyFightPunchDelay()
+    {
+        EnemyBoxing();
+        CharacterHealth -= 0.1f;
+        EnemyHealth -= 0.2f;
+        yield return new WaitForSeconds(1.8f);
+        EnemyIdle();
+    }
+
+    private IEnumerator DeathDelay()
+    {
+        DeathAnimation();
+        yield return new WaitForSeconds(0.1f);
+        GameManager.Instance.Lose();
+    }
+
+    private IEnumerator EnemyDeathDelay()
+    {
+        EnemyDeathAnimation();
+        yield return new WaitForSeconds(0.1f);
+        GameManager.Instance.Win();
+    }
+
     private void CharacterMaxHpAndExtend()
     {
         if (_stickmanExtend.localScale.y <= 2f)
@@ -329,10 +355,22 @@ public class PlayerController : MonoBehaviour
             _isFirstBoxingIdle = true;
             BoxingIdle();
         }
-
+        _fightCamera.SetActive(true);
+        
         if (Input.GetMouseButtonDown(0))
         {
             StartCoroutine(FightPunchDelay());
+            StartCoroutine(EnemyFightPunchDelay());
+        }
+
+        if (EnemyHealth <= 0)
+        {
+            StartCoroutine(EnemyDeathDelay());
+        }
+
+        if (CharacterHealth <= 0)
+        {
+            GameManager.Instance.CurrentGameState = GameState.LoseGame;
         }
     }
     
@@ -362,6 +400,14 @@ public class PlayerController : MonoBehaviour
     private void DeathAnimation()
     {
         _animator.SetBool("Death", true);
+        _animator.SetBool("Run", false);
+    }
+
+    private void EnemyDeathAnimation()
+    {
+        _enemyAnimator.SetBool("Death",true);
+        _enemyAnimator.SetBool("Idle",false);
+        _enemyAnimator.SetBool("Fight",false);
     }
 
     private void WinAnimation()
@@ -381,5 +427,17 @@ public class PlayerController : MonoBehaviour
         _animator.SetBool("BoxingIdle", true);
         _animator.SetBool("Punch", false);
         _animator.SetBool("Run", false);
+    }
+
+    private void EnemyBoxing()
+    {
+        _enemyAnimator.SetBool("Fight",true);
+        _enemyAnimator.SetBool("Idle",false);
+    }
+
+    private void EnemyIdle()
+    {
+        _enemyAnimator.SetBool("Idle",true);
+        _enemyAnimator.SetBool("Fight",false);
     }
 }

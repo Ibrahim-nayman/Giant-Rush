@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1147814929}
   m_LocalRotation: {x: 0.17794359, y: -0.0008276204, z: -0.000016461288, w: 0.9840404}
-  m_LocalPosition: {x: 0.05, y: 11.65, z: -13.5}
+  m_LocalPosition: {x: 0.07, y: 15.66, z: -24.21}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3427810006634709803}
@@ -608,7 +608,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5de12b82d621904787d4f6fd9069128, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CharacterHealth: 2
   CharacterSpeed: 15
+  _heightValue: {x: 0.1, y: 0.1, z: 0.1}
   _sideMovementSensitivity: 5
   _sideMovementLerpSpeed: 10
   _sideMovementRoot: {fileID: 3427810006634709803}
@@ -616,12 +618,15 @@ MonoBehaviour:
   _rightLimit: {fileID: 5003547705232043459}
   _camera: {fileID: 1147814931}
   _stickmanExtend: {fileID: 424287450139412089}
-  _rayfire: {fileID: 0}
   _animator: {fileID: 8592876449711865404}
+  _enemyAnimator: {fileID: 0}
   _colorMat: {fileID: 2100000, guid: 0bcdca085445acc4aa21304ffa02deba, type: 2}
   _yellowColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 0}
   _greenColor: {r: 0.21568628, g: 1, b: 0.015686275, a: 0}
   _orangeColor: {r: 1, g: 0.34509805, b: 0, a: 0}
+  _greenStickmanImage: {fileID: 0}
+  _orangeStickmanImage: {fileID: 0}
+  _yellowStickmanImage: {fileID: 0}
 --- !u!54 &1836708993440641247
 Rigidbody:
   m_ObjectHideFlags: 0
