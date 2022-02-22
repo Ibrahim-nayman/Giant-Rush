@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9217507472329447270}
   m_Layer: 0
-  m_Name: Wall 1
+  m_Name: BreakableWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
