@@ -2728,6 +2728,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 948881986}
     - target: {fileID: 1696314725, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
+      propertyPath: WallHealth
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1696314725, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
       propertyPath: _fightCamera
       value: 
       objectReference: {fileID: 735498750}
@@ -3044,6 +3048,14 @@ PrefabInstance:
     - target: {fileID: 664960416177181645, guid: 012198c0de96c0241b655ef1e62a076f, type: 3}
       propertyPath: m_TagString
       value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 664960416177181646, guid: 012198c0de96c0241b655ef1e62a076f, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5987250064743709408, guid: 012198c0de96c0241b655ef1e62a076f, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 012198c0de96c0241b655ef1e62a076f, type: 3}

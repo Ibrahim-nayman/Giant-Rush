@@ -13,6 +13,7 @@ using Vector3 = UnityEngine.Vector3;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField, BoxGroup("Game Settings")] public float CharacterHealth = 2f;
+    [SerializeField, BoxGroup("Game Settings")] public float WallHealth;
     [SerializeField, BoxGroup("Game Settings")] public float EnemyHealth = 2f;
     [SerializeField, BoxGroup("Game Settings")] public float CharacterSpeed = 25f;
     [SerializeField, BoxGroup("Game Settings")] private Vector3 _heightValue = new Vector3(0.1f,0.1f,0.1f);
@@ -62,6 +63,7 @@ public class PlayerController : MonoBehaviour
     private bool _isCharacterInteract;
     private bool _isFirstRunStarted;
     private bool _isFirstBoxingIdle;
+    private bool _isCharacterDeath;
 
     private void Start()
     {
@@ -165,7 +167,7 @@ public class PlayerController : MonoBehaviour
 
         if (other.CompareTag("Wall"))
         {
-            if (CharacterHealth > 3f)
+            if (CharacterHealth > WallHealth)
             {
                 StartCoroutine(WallPunch(other));
             }
@@ -303,7 +305,7 @@ public class PlayerController : MonoBehaviour
     private IEnumerator FightPunchDelay()
     {
         PunchAnimation();
-        yield return new WaitForSeconds(1.2f);
+        yield return new WaitForSeconds(0.6f);
         BoxingIdle();
     }
 
@@ -312,15 +314,19 @@ public class PlayerController : MonoBehaviour
         EnemyBoxing();
         CharacterHealth -= 0.1f;
         EnemyHealth -= 0.2f;
-        yield return new WaitForSeconds(1.8f);
+        yield return new WaitForSeconds(1f);
         EnemyIdle();
     }
 
     private IEnumerator DeathDelay()
     {
-        DeathAnimation();
-        yield return new WaitForSeconds(0.1f);
-        GameManager.Instance.Lose();
+        if (!_isCharacterDeath)
+        {
+            _isCharacterDeath = true;
+            DeathAnimation();
+            yield return new WaitForSeconds(0.1f);
+            GameManager.Instance.Lose();
+        }
     }
 
     private IEnumerator EnemyDeathDelay()
@@ -347,6 +353,7 @@ public class PlayerController : MonoBehaviour
 
     public void FightGameState()
     {
+        _stickmanExtend.position = new Vector3(0,0,997);
         CharacterSpeed = 0;
         _isCharacterInteract = true;
 
@@ -395,6 +402,7 @@ public class PlayerController : MonoBehaviour
             _isFirstRunStarted = true;
             _animator.SetBool("Run", true);
             _animator.SetBool("Idle", false);
+            _animator.SetBool("Win",false);
         }
     }
 
