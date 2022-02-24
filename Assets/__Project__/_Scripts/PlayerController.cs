@@ -1,8 +1,12 @@
 using System;
 using System.Collections;
+using System.Numerics;
 using NaughtyAttributes;
 using RayFire;
 using UnityEngine;
+using UnityEngine.UIElements;
+using Quaternion = UnityEngine.Quaternion;
+using Random = System.Random;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
@@ -18,11 +22,9 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField, BoxGroup("Setup")] private Transform _sideMovementRoot;
     [SerializeField, BoxGroup("Setup")] private Transform _leftLimit, _rightLimit;
+    [SerializeField, BoxGroup("Setup")] private Camera _camera;
     [SerializeField, BoxGroup("Setup")] private GameObject _fightCamera;
     [SerializeField, BoxGroup("Setup")] private Transform _stickmanExtend;
-    
-    [SerializeField, BoxGroup("Camera")] private Camera _camera;
-    [SerializeField, BoxGroup("Camera")] private Vector3 _fightCameraPos = new Vector3();
 
     [SerializeField, BoxGroup("Player Animator")] private Animator _animator;
 
@@ -351,7 +353,7 @@ public class PlayerController : MonoBehaviour
 
     public void FightGameState()
     {
-        _stickmanExtend.position = _fightCameraPos;
+        _stickmanExtend.position = new Vector3(0,0,997);
         CharacterSpeed = 0;
         _isCharacterInteract = true;
 
