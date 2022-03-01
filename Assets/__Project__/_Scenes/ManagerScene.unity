@@ -2589,7 +2589,7 @@ MonoBehaviour:
   GreenStickmanImage: {fileID: 168470883}
   OrangeStickmanImage: {fileID: 1419706414}
   YellowStickmanImage: {fileID: 149736078}
-  LoopAfter: 1
+  LoopAfter: 0
   LevelNumText: {fileID: 9185552491765255724}
   IsGameEnded: 0
 --- !u!4 &9185552491778161445

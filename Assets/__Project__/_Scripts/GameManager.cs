@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour
         IsGameEnded = false;
         CurrentGameState = GameState.BeforeStartGame;
         MMVibrationManager.TransientHaptic(1, 0.1f, true, this);
-        SceneManager.LoadScene(PlayerPrefs.GetInt("reachedLevel", 2));
+        SceneManager.LoadScene(PlayerPrefs.GetInt("reachedLevel", 1));
         LevelNumText.text = "Level " + PlayerPrefs.GetInt("fakeLevelNumber", 1).ToString();
         WinMenu.SetActive(false);
         LoseMenu.SetActive(false);
@@ -72,9 +72,9 @@ public class GameManager : MonoBehaviour
         MMVibrationManager.TransientHaptic(1, 0.1f, true, this);
         PlayerPrefs.SetInt("fakeLevelNumber", PlayerPrefs.GetInt("fakeLevelNumber", 1) + 1);
 
-        if (SceneManager.sceneCountInBuildSettings > PlayerPrefs.GetInt("reachedLevel", 2) + 1)
+        if (SceneManager.sceneCountInBuildSettings > PlayerPrefs.GetInt("reachedLevel", 1) + 1)
         {
-            PlayerPrefs.SetInt("reachedLevel", PlayerPrefs.GetInt("reachedLevel", 2) + 1);
+            PlayerPrefs.SetInt("reachedLevel", PlayerPrefs.GetInt("reachedLevel", 1) + 1);
         }
         else
         {
