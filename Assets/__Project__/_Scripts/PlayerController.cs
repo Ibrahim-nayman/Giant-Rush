@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField, BoxGroup("Game Settings")] private Vector3 _heightValue = new Vector3(0.1f,0.1f,0.1f);
     [SerializeField, BoxGroup("Game Settings")] private float _sideMovementSensitivity = 5f;
     [SerializeField, BoxGroup("Game Settings")] private float _sideMovementLerpSpeed = 10f;
+    [SerializeField, BoxGroup("Game Settings")] private float _punchPower = 0.2f;
+    [SerializeField, BoxGroup("Game Settings")] private GameObject _ui;
 
     [SerializeField, BoxGroup("Setup")] private Transform _sideMovementRoot;
     [SerializeField, BoxGroup("Setup")] private Transform _leftLimit, _rightLimit;
@@ -64,6 +66,7 @@ public class PlayerController : MonoBehaviour
     private bool _isFirstRunStarted;
     private bool _isFirstBoxingIdle;
     private bool _isCharacterDeath;
+    private bool _isEnemyFight;
 
     private void Start()
     {
@@ -95,9 +98,11 @@ public class PlayerController : MonoBehaviour
                 break;
             case GameState.WinGame:
                 WinAnimation();
+                _ui.SetActive(false);
                 break;
             case GameState.LoseGame:
                 StartCoroutine(DeathDelay());
+                _ui.SetActive(false);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -173,7 +178,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                GameManager.Instance.CurrentGameState = GameState.LoseGame;
+                GameManager.Instance.Lose();
                 //TODO Ölüm animasyonu koyulacak ve retry tuşuna basınca yukarıdaki kodlar çalışacak.
             }
         }
@@ -305,17 +310,24 @@ public class PlayerController : MonoBehaviour
     private IEnumerator FightPunchDelay()
     {
         PunchAnimation();
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(1.2f);
+        EnemyHealth -= _punchPower;
+        // todo rakip için hit animasyonu
         BoxingIdle();
     }
 
     private IEnumerator EnemyFightPunchDelay()
     {
-        EnemyBoxing();
-        CharacterHealth -= 0.1f;
-        EnemyHealth -= 0.2f;
-        yield return new WaitForSeconds(1f);
-        EnemyIdle();
+        if (!_isEnemyFight)
+        {
+            _isEnemyFight = true;
+            EnemyBoxing();
+            yield return new WaitForSeconds(1.2f);
+            CharacterHealth -= _punchPower;
+            // todo ana karakter için hit animasyonu
+            _isEnemyFight = false;
+            EnemyIdle();
+        }
     }
 
     private IEnumerator DeathDelay()
@@ -325,15 +337,7 @@ public class PlayerController : MonoBehaviour
             _isCharacterDeath = true;
             DeathAnimation();
             yield return new WaitForSeconds(0.1f);
-            GameManager.Instance.Lose();
         }
-    }
-
-    private IEnumerator EnemyDeathDelay()
-    {
-        EnemyDeathAnimation();
-        yield return new WaitForSeconds(0.1f);
-        GameManager.Instance.Win();
     }
 
     private void CharacterMaxHpAndExtend()
@@ -367,18 +371,20 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             StartCoroutine(FightPunchDelay());
-            StartCoroutine(EnemyFightPunchDelay());
         }
 
+        StartCoroutine(EnemyFightPunchDelay());
+        
         if (EnemyHealth <= 0)
         {
-            StartCoroutine(EnemyDeathDelay());
+            GameManager.Instance.Win();
+            EnemyDeathAnimation();
             WinAnimation();
         }
 
         if (CharacterHealth <= 0)
         {
-            GameManager.Instance.CurrentGameState = GameState.LoseGame;
+            GameManager.Instance.Lose();
         }
     }
     

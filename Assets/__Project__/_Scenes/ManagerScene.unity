@@ -1864,7 +1864,7 @@ MonoBehaviour:
   PlayGameMenu: {fileID: 9185552491734346495}
   WinMenu: {fileID: 9185552491698358521}
   LoseMenu: {fileID: 9185552491688796295}
-  LoopAfter: 2
+  LoopAfter: 1
   LevelNumText: {fileID: 9185552491765255724}
   IsGameEnded: 0
 --- !u!4 &9185552491778161445
