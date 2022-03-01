@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField, BoxGroup("Game Settings")] private float _sideMovementLerpSpeed = 10f;
     
     [SerializeField, BoxGroup("Slider Settings")] public ExtendBar extendBar;
+    [SerializeField, BoxGroup("Slider Settings")] public HealthBar characterHealthBar;
+    [SerializeField, BoxGroup("Slider Settings")] public HealthBar enemyHealthBar;
     
     [SerializeField, BoxGroup("Stickman Fight Settings")] private float CharacterHealth = 2f;
     [SerializeField, BoxGroup("Stickman Fight Settings")] private float EnemyHealth = 3f;
@@ -28,6 +30,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField, BoxGroup("Setup")] private Transform _leftLimit, _rightLimit;
     [SerializeField, BoxGroup("Setup")] private Camera _camera;
     [SerializeField, BoxGroup("Setup")] private Transform _stickmanExtend;
+    [SerializeField, BoxGroup("Slider")] private GameObject _characterHealthSlider;
+    [SerializeField, BoxGroup("Slider")] private GameObject _enemyHealthSlider;
 
     [SerializeField, BoxGroup("Animators")] private Animator _characterAnimator;
     [SerializeField, BoxGroup("Animators")] private Animator _enemyAnimator;
@@ -66,7 +70,6 @@ public class PlayerController : MonoBehaviour
     private bool _isCharacterHit;
     private bool _diamondInfoSaved;
 
-
     private void Start()
     {
         DiamondCounter.Value = 0;
@@ -81,6 +84,9 @@ public class PlayerController : MonoBehaviour
         RestartGame();
 
         extendBar.ExtendSliderBar.value = Mathf.Lerp(extendBar.ExtendSliderBar.value, _stickmanExtend.localScale.y, 2 * Time.deltaTime);
+        characterHealthBar.HealthSliderBar.value = Mathf.Lerp(characterHealthBar.HealthSliderBar.value, CharacterHealth,2 * Time.deltaTime);
+        enemyHealthBar.HealthSliderBar.value = Mathf.Lerp(enemyHealthBar.HealthSliderBar.value, EnemyHealth,2 * Time.deltaTime);
+        
         
         switch (GameManager.Instance.CurrentGameState)
         {
@@ -101,8 +107,10 @@ public class PlayerController : MonoBehaviour
             case GameState.WinGame:
                 WinAnimation();
                 SaveDiamondInfo();
+                SliderOnOff();
                 break;
             case GameState.LoseGame:
+                SliderOnOff();
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -381,6 +389,8 @@ public class PlayerController : MonoBehaviour
 
     public void FightGameState()
     {
+        StartCoroutine(SliderDelay());
+
         gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, _stickmanFightPos, 2 * Time.deltaTime);
         _sideMovementRoot.transform.localPosition = Vector3.Lerp(_sideMovementRoot.transform.localPosition, Vector3.zero, 2* Time.deltaTime);
         _camera.transform.localPosition = Vector3.Lerp(_camera.transform.localPosition, new Vector3(15, 8, 1.5f), 2 * Time.deltaTime);
@@ -393,6 +403,10 @@ public class PlayerController : MonoBehaviour
         {
             _isFirstBoxingIdle = true;
             BoxingIdle();
+            characterHealthBar.HealthSliderBar.maxValue = CharacterHealth;
+            characterHealthBar.HealthSliderBar.value = characterHealthBar.HealthSliderBar.maxValue;
+            enemyHealthBar.HealthSliderBar.maxValue = EnemyHealth;
+            enemyHealthBar.HealthSliderBar.value = enemyHealthBar.HealthSliderBar.maxValue;
         }
         
         StartCoroutine(FightPunchDelay());
@@ -499,5 +513,18 @@ public class PlayerController : MonoBehaviour
             _diamondInfoSaved = true;
             PlayerPrefs.SetInt("Diamond",DiamondCounter.Value + PlayerPrefs.GetInt("Diamond"));
         }
+    }
+
+    private void SliderOnOff()
+    {
+        _characterHealthSlider.SetActive(false);
+        _enemyHealthSlider.SetActive(false);
+    }
+
+    private IEnumerator SliderDelay()
+    {
+        yield return new WaitForSeconds(0.5f);
+        _characterHealthSlider.SetActive(true);
+        _enemyHealthSlider.SetActive(true);
     }
 }

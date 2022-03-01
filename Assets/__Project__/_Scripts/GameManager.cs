@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using MoreMountains.NiceVibrations;
 using NaughtyAttributes;
 using TMPro;
+using UnityEditor;
 
 public enum GameState
 {
@@ -53,6 +54,8 @@ public class GameManager : MonoBehaviour
 
     public void LoadReachedLevel()
     {
+        IsGameEnded = false;
+        CurrentGameState = GameState.BeforeStartGame;
         MMVibrationManager.TransientHaptic(1, 0.1f, true, this);
         SceneManager.LoadScene(PlayerPrefs.GetInt("reachedLevel", 2));
         LevelNumText.text = "Level " + PlayerPrefs.GetInt("fakeLevelNumber", 1).ToString();
