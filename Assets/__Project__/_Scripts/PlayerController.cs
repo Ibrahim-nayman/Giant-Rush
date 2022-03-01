@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField, BoxGroup("Game Settings")] public float EnemyHealth = 2f;
     [SerializeField, BoxGroup("Game Settings")] public float CharacterSpeed = 25f;
     [SerializeField, BoxGroup("Game Settings")] private Vector3 _heightValue = new Vector3(0.1f,0.1f,0.1f);
+    [SerializeField, BoxGroup("Game Settings")] private Vector3 _stickmanFightPos = new Vector3();
     [SerializeField, BoxGroup("Game Settings")] private float _sideMovementSensitivity = 5f;
     [SerializeField, BoxGroup("Game Settings")] private float _sideMovementLerpSpeed = 10f;
     [SerializeField, BoxGroup("Game Settings")] private float _punchPower = 0.2f;
@@ -67,6 +68,7 @@ public class PlayerController : MonoBehaviour
     private bool _isFirstBoxingIdle;
     private bool _isCharacterDeath;
     private bool _isEnemyFight;
+    private bool _isCharacterPunching;
 
     private void Start()
     {
@@ -101,7 +103,6 @@ public class PlayerController : MonoBehaviour
                 _ui.SetActive(false);
                 break;
             case GameState.LoseGame:
-                StartCoroutine(DeathDelay());
                 _ui.SetActive(false);
                 break;
             default:
@@ -309,11 +310,16 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator FightPunchDelay()
     {
-        PunchAnimation();
-        yield return new WaitForSeconds(1.2f);
-        EnemyHealth -= _punchPower;
-        // todo rakip için hit animasyonu
-        BoxingIdle();
+        if (Input.GetMouseButtonDown(0) && !_isCharacterPunching)
+        {
+            _isCharacterPunching = true;
+            PunchAnimation();
+            yield return new WaitForSeconds(1.2f);
+            _isCharacterPunching = false;
+            EnemyHealth -= _punchPower;
+            // todo rakip için hit animasyonu
+            BoxingIdle();
+        }
     }
 
     private IEnumerator EnemyFightPunchDelay()
@@ -357,21 +363,21 @@ public class PlayerController : MonoBehaviour
 
     public void FightGameState()
     {
-        _stickmanExtend.position = new Vector3(0,0,997);
+        _stickmanExtend.position = _stickmanFightPos;
         CharacterSpeed = 0;
         _isCharacterInteract = true;
+        //_animator.applyRootMotion = true;
+        //_enemyAnimator.applyRootMotion = true;
 
         if (!_isFirstBoxingIdle)
         {
             _isFirstBoxingIdle = true;
             BoxingIdle();
         }
+
         _fightCamera.SetActive(true);
-        
-        if (Input.GetMouseButtonDown(0))
-        {
-            StartCoroutine(FightPunchDelay());
-        }
+
+        StartCoroutine(FightPunchDelay());
 
         StartCoroutine(EnemyFightPunchDelay());
         
@@ -379,11 +385,11 @@ public class PlayerController : MonoBehaviour
         {
             GameManager.Instance.Win();
             EnemyDeathAnimation();
-            WinAnimation();
         }
 
         if (CharacterHealth <= 0)
         {
+            DeathAnimation();
             GameManager.Instance.Lose();
         }
     }
@@ -416,6 +422,7 @@ public class PlayerController : MonoBehaviour
     {
         _animator.SetBool("Death", true);
         _animator.SetBool("Run", false);
+        _animator.SetBool("BoxingIdle",false);
     }
 
     private void EnemyDeathAnimation()

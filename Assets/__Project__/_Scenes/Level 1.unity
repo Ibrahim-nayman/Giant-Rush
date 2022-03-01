@@ -2749,6 +2749,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 168470883}
     - target: {fileID: 1696314725, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
+      propertyPath: _stickmanFightPos.z
+      value: 997
+      objectReference: {fileID: 0}
+    - target: {fileID: 1696314725, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
       propertyPath: _orangeStickmanImage
       value: 
       objectReference: {fileID: 1419706414}
