@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Numerics;
 using DG.Tweening;
+using MoreMountains.NiceVibrations;
 using NaughtyAttributes;
 using RayFire;
 using UnityEngine;
@@ -169,6 +170,7 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("FightLine"))
         {
             GameManager.Instance.CurrentGameState = GameState.FightGame;
+            MMVibrationManager.Haptic(HapticTypes.Warning);
         }
 
         #region Obstacle
@@ -177,6 +179,8 @@ public class PlayerController : MonoBehaviour
         {
             DeathAnimation();
             GameManager.Instance.Lose();
+            MMVibrationManager.Haptic(HapticTypes.Failure);
+            _camera.transform.DOShakePosition(0.5f);
         }
 
         if (other.CompareTag("Wall"))
@@ -190,6 +194,8 @@ public class PlayerController : MonoBehaviour
             {
                 GameManager.Instance.Lose();
                 DeathAnimation();
+                MMVibrationManager.Haptic(HapticTypes.Failure);
+                _camera.transform.DOShakePosition(0.5f);
             }
         }
 
@@ -204,6 +210,7 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.GreenStickmanImage.SetActive(false);
             GameManager.Instance.OrangeStickmanImage.SetActive(true);
             GameManager.Instance.YellowStickmanImage.SetActive(false);
+            MMVibrationManager.Haptic(HapticTypes.MediumImpact);
         }
 
         if (other.CompareTag("ColorChangeYellow"))
@@ -213,6 +220,7 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.GreenStickmanImage.SetActive(false);
             GameManager.Instance.OrangeStickmanImage.SetActive(false);
             GameManager.Instance.YellowStickmanImage.SetActive(true);
+            MMVibrationManager.Haptic(HapticTypes.MediumImpact);
         }
 
         if (other.CompareTag("ColorChangeGreen"))
@@ -222,6 +230,7 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.GreenStickmanImage.SetActive(true);
             GameManager.Instance.OrangeStickmanImage.SetActive(false);
             GameManager.Instance.YellowStickmanImage.SetActive(false);
+            MMVibrationManager.Haptic(HapticTypes.MediumImpact);
         }
 
         #endregion
@@ -234,6 +243,7 @@ public class PlayerController : MonoBehaviour
             CharacterHealth += _healthValue;
             _stickmanExtend.transform.localScale += _heightValue;
             ScoreCounter.ScoreValue += 1;
+            MMVibrationManager.Haptic(HapticTypes.LightImpact);
         }
 
         if (!gameObject.CompareTag(other.tag) && other.CompareTag("OrangeStickman"))
@@ -241,6 +251,7 @@ public class PlayerController : MonoBehaviour
             other.gameObject.SetActive(false);
             CharacterHealth -= _healthValue;
             _stickmanExtend.transform.localScale -= _heightValue;
+            MMVibrationManager.Haptic(HapticTypes.LightImpact);
         }
 
         if (!gameObject.CompareTag(other.tag) && other.CompareTag("YellowStickman"))
@@ -248,6 +259,7 @@ public class PlayerController : MonoBehaviour
             other.gameObject.SetActive(false);
             CharacterHealth -= _healthValue;
             _stickmanExtend.transform.localScale -= _heightValue;
+            MMVibrationManager.Haptic(HapticTypes.LightImpact);
         }
 
         if (!gameObject.CompareTag(other.tag) && other.CompareTag("GreenStickman"))
@@ -255,6 +267,7 @@ public class PlayerController : MonoBehaviour
             other.gameObject.SetActive(false);
             CharacterHealth -= _healthValue;
             _stickmanExtend.transform.localScale -= _heightValue;
+            MMVibrationManager.Haptic(HapticTypes.LightImpact);
         }
 
         #endregion
@@ -315,6 +328,7 @@ public class PlayerController : MonoBehaviour
         _isCharacterInteract = false;
         other.transform.parent.GetComponentInChildren<RayfireRigid>().Initialize();
         _camera.transform.DOShakePosition(0.75f);
+        MMVibrationManager.Haptic(HapticTypes.HeavyImpact);
         CharacterSpeed = 35;
         CharacterHealth -= _healthValue * 10;
         _stickmanExtend.localScale -= _heightValue * 10;
@@ -333,6 +347,8 @@ public class PlayerController : MonoBehaviour
 
             EnemyHitAnimation();
             EnemyHealth -= _punchPower;
+            MMVibrationManager.Haptic(HapticTypes.MediumImpact);
+            _camera.transform.DOShakePosition(0.25f);
 
             yield return new WaitForSeconds(0.5f);
 
@@ -358,6 +374,8 @@ public class PlayerController : MonoBehaviour
             {
                 HitAnimation();
                 CharacterHealth -= _punchPower;
+                MMVibrationManager.Haptic(HapticTypes.MediumImpact);
+                _camera.transform.DOShakePosition(0.25f);
             }
 
             yield return new WaitForSeconds(0.5f);
