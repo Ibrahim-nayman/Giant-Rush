@@ -314,12 +314,14 @@ public class PlayerController : MonoBehaviour
         {
             _isCharacterPunching = true;
             PunchAnimation();
-            yield return new WaitForSeconds(1.5f);
-            _isCharacterPunching = false;
+            yield return new WaitForSeconds(0.5f);
+            EnemyHitAnimation();
+            yield return new WaitForSeconds(0.5f);
+            _enemyAnimator.SetBool("EnemyHit",false);
             EnemyHealth -= _punchPower;
-            
-            // todo rakip için hit animasyonu
             BoxingIdle();
+            yield return new WaitForSeconds(1.2f);
+            _isCharacterPunching = false;
         }
     }
 
@@ -471,5 +473,11 @@ public class PlayerController : MonoBehaviour
     private void HitAnimation()
     {
         _animator.SetBool("Hit",true);
+    }
+
+    private void EnemyHitAnimation()
+    {
+        _enemyAnimator.SetBool("EnemyHit",true);
+        
     }
 }
