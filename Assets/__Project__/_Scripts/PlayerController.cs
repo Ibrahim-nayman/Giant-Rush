@@ -13,14 +13,15 @@ using Vector3 = UnityEngine.Vector3;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField, BoxGroup("Game Settings")] public float CharacterHealth = 2f;
-    [SerializeField, BoxGroup("Game Settings")] public float WallHealth;
-    [SerializeField, BoxGroup("Game Settings")] public float EnemyHealth = 2f;
+    [SerializeField, BoxGroup("Game Settings")] public float WallHealth = 4f;
+    [SerializeField, BoxGroup("Game Settings")] public float EnemyHealth = 3f;
     [SerializeField, BoxGroup("Game Settings")] public float CharacterSpeed = 25f;
-    [SerializeField, BoxGroup("Game Settings")] private Vector3 _heightValue = new Vector3(0.1f,0.1f,0.1f);
+    [SerializeField, BoxGroup("Game Settings")] private Vector3 _heightValue = new Vector3(0.2f,0.2f,0.2f);
     [SerializeField, BoxGroup("Game Settings")] private Vector3 _stickmanFightPos = new Vector3();
     [SerializeField, BoxGroup("Game Settings")] private float _sideMovementSensitivity = 5f;
     [SerializeField, BoxGroup("Game Settings")] private float _sideMovementLerpSpeed = 10f;
     [SerializeField, BoxGroup("Game Settings")] private float _punchPower = 0.2f;
+    [SerializeField, BoxGroup("Game Settings")] private float _healthValue = 0.2f;
     [SerializeField, BoxGroup("Game Settings")] private GameObject _ui;
 
     [SerializeField, BoxGroup("Setup")] private Transform _sideMovementRoot;
@@ -182,7 +183,7 @@ public class PlayerController : MonoBehaviour
             else
             {
                 GameManager.Instance.Lose();
-                //TODO Ölüm animasyonu koyulacak ve retry tuşuna basınca yukarıdaki kodlar çalışacak.
+                DeathAnimation();
             }
         }
 
@@ -224,7 +225,7 @@ public class PlayerController : MonoBehaviour
         if (gameObject.CompareTag(other.tag))
         {
             other.gameObject.SetActive(false);
-            CharacterHealth += 0.1f;
+            CharacterHealth += _healthValue;
             _stickmanExtend.transform.localScale += _heightValue;
             ScoreCounter.ScoreValue += 1;
         }
@@ -232,21 +233,21 @@ public class PlayerController : MonoBehaviour
         if (!gameObject.CompareTag(other.tag) && other.CompareTag("OrangeStickman"))
         {
             other.gameObject.SetActive(false);
-            CharacterHealth -= 0.1f;
+            CharacterHealth -= _healthValue;
             _stickmanExtend.transform.localScale -= _heightValue;
         }
 
         if (!gameObject.CompareTag(other.tag) && other.CompareTag("YellowStickman"))
         {
             other.gameObject.SetActive(false);
-            CharacterHealth -= 0.1f;
+            CharacterHealth -= _healthValue;
             _stickmanExtend.transform.localScale -= _heightValue;
         }
 
         if (!gameObject.CompareTag(other.tag) && other.CompareTag("GreenStickman"))
         {
             other.gameObject.SetActive(false);
-            CharacterHealth -= 0.1f;
+            CharacterHealth -= _healthValue;
             _stickmanExtend.transform.localScale -= _heightValue;
         }
 
@@ -301,12 +302,15 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator WallPunch(Collider other)
     {
+        _isCharacterInteract = true;
         CharacterSpeed = 0f;
         PunchAnimation();
         yield return new WaitForSeconds(0.75f);
+        _isCharacterInteract = false;
         other.transform.parent.GetComponentInChildren<RayfireRigid>().Initialize();
         CharacterSpeed = 25;
-        CharacterHealth -= 1;
+        CharacterHealth -= _healthValue * 10;
+        _stickmanExtend.localScale -= _heightValue * 10;
         RunAfterWallAnimation();
     }
 
