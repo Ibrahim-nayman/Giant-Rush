@@ -1,13 +1,19 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ExtendBar : MonoBehaviour
 {
-    void Start()
+
+    public Slider ExtendSliderBar;
+
+    public void SetMaxExtend(int extend)
     {
-        
+        ExtendSliderBar.maxValue = extend;
+        ExtendSliderBar.value = extend;
     }
-    void Update()
+
+    public void SetExtend(int extend)
     {
-        
+        ExtendSliderBar.value = extend;
     }
 }
