@@ -1,28 +1,26 @@
 using System;
 using System.Collections;
-using System.Numerics;
 using NaughtyAttributes;
 using RayFire;
 using UnityEngine;
-using UnityEngine.UIElements;
-using Quaternion = UnityEngine.Quaternion;
-using Random = System.Random;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField, BoxGroup("Game Settings")] public float CharacterHealth = 2f;
-    [SerializeField, BoxGroup("Game Settings")] public float WallHealth = 4f;
-    [SerializeField, BoxGroup("Game Settings")] public float EnemyHealth = 3f;
-    [SerializeField, BoxGroup("Game Settings")] public float CharacterSpeed = 25f;
-    [SerializeField, BoxGroup("Game Settings")] private Vector3 _heightValue = new Vector3(0.2f,0.2f,0.2f);
-    [SerializeField, BoxGroup("Game Settings")] private Vector3 _stickmanFightPos = new Vector3();
+    [SerializeField, BoxGroup("Game Settings")] private float CharacterSpeed = 25f;
+    [SerializeField, BoxGroup("Game Settings")] private float WallHealth = 4f;
     [SerializeField, BoxGroup("Game Settings")] private float _sideMovementSensitivity = 5f;
     [SerializeField, BoxGroup("Game Settings")] private float _sideMovementLerpSpeed = 10f;
-    [SerializeField, BoxGroup("Game Settings")] private float _punchPower = 0.2f;
-    [SerializeField, BoxGroup("Game Settings")] private float _healthValue = 0.2f;
-    [SerializeField, BoxGroup("Game Settings")] private GameObject _ui;
+    
+    [SerializeField, BoxGroup("Stickman Fight Settings")] private float CharacterHealth = 2f;
+    [SerializeField, BoxGroup("Stickman Fight Settings")] private float EnemyHealth = 3f;
+    [SerializeField, BoxGroup("Stickman Fight Settings")] private Vector3 _heightValue = new Vector3(0.2f,0.2f,0.2f);
+    [SerializeField, BoxGroup("Stickman Fight Settings")] private Vector3 _stickmanFightPos = new Vector3();
+    [SerializeField, BoxGroup("Stickman Fight Settings")] private float _punchPower = 0.2f;
+    [SerializeField, BoxGroup("Stickman Fight Settings")] private float _healthValue = 0.2f;
+
+    [SerializeField, BoxGroup("UI Settings")] private GameObject _userInterface;
 
     [SerializeField, BoxGroup("Setup")] private Transform _sideMovementRoot;
     [SerializeField, BoxGroup("Setup")] private Transform _leftLimit, _rightLimit;
@@ -30,9 +28,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField, BoxGroup("Setup")] private GameObject _fightCamera;
     [SerializeField, BoxGroup("Setup")] private Transform _stickmanExtend;
 
-    [SerializeField, BoxGroup("Player Animator")] private Animator _animator;
-
-    [SerializeField, BoxGroup("Enemy Animator")] private Animator _enemyAnimator;
+    [SerializeField, BoxGroup("Animators")] private Animator _characterAnimator;
+    [SerializeField, BoxGroup("Animators")] private Animator _enemyAnimator;
 
     [SerializeField, BoxGroup("Player Material")] private Material _colorMat;
     [SerializeField, BoxGroup("Player Material")] private Color _yellowColor;
@@ -103,10 +100,10 @@ public class PlayerController : MonoBehaviour
                 break;
             case GameState.WinGame:
                 WinAnimation();
-                _ui.SetActive(false);
+                _userInterface.SetActive(false);
                 break;
             case GameState.LoseGame:
-                _ui.SetActive(false);
+                _userInterface.SetActive(false);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -352,12 +349,12 @@ public class PlayerController : MonoBehaviour
                 HitAnimation();
                 CharacterHealth -= _punchPower;
             }
-            
+
             yield return new WaitForSeconds(0.5f);
-            
+
             if (!_isCharacterHit)
             {
-                _animator.SetBool("Hit", false);
+                _characterAnimator.SetBool("Hit", false);
                 EnemyIdle();
             }
 
@@ -387,8 +384,6 @@ public class PlayerController : MonoBehaviour
         _stickmanExtend.position = _stickmanFightPos;
         CharacterSpeed = 0;
         _isCharacterInteract = true;
-        //_animator.applyRootMotion = true;
-        //_enemyAnimator.applyRootMotion = true;
 
         if (!_isFirstBoxingIdle)
         {
@@ -417,15 +412,15 @@ public class PlayerController : MonoBehaviour
 
     private void IdleAnimation()
     {
-        _animator.SetBool("Idle", true);
-        _animator.SetBool("Run", false);
+        _characterAnimator.SetBool("Idle", true);
+        _characterAnimator.SetBool("Run", false);
     }
 
     private void RunAfterWallAnimation()
     {
-        _animator.SetBool("Run", true);
-        _animator.SetBool("Idle", false);
-        _animator.SetBool("Punch", false);
+        _characterAnimator.SetBool("Run", true);
+        _characterAnimator.SetBool("Idle", false);
+        _characterAnimator.SetBool("Punch", false);
     }
 
     private void FirstRunAnimation()
@@ -433,17 +428,17 @@ public class PlayerController : MonoBehaviour
         if (!_isFirstRunStarted)
         {
             _isFirstRunStarted = true;
-            _animator.SetBool("Run", true);
-            _animator.SetBool("Idle", false);
-            _animator.SetBool("Win", false);
+            _characterAnimator.SetBool("Run", true);
+            _characterAnimator.SetBool("Idle", false);
+            _characterAnimator.SetBool("Win", false);
         }
     }
 
     private void DeathAnimation()
     {
-        _animator.SetBool("Death", true);
-        _animator.SetBool("Run", false);
-        _animator.SetBool("BoxingIdle", false);
+        _characterAnimator.SetBool("Death", true);
+        _characterAnimator.SetBool("Run", false);
+        _characterAnimator.SetBool("BoxingIdle", false);
     }
 
     private void EnemyDeathAnimation()
@@ -455,22 +450,22 @@ public class PlayerController : MonoBehaviour
 
     private void WinAnimation()
     {
-        _animator.SetBool("Win", true);
-        _animator.SetBool("BoxingIdle", false);
+        _characterAnimator.SetBool("Win", true);
+        _characterAnimator.SetBool("BoxingIdle", false);
     }
 
     private void PunchAnimation()
     {
-        _animator.SetBool("Punch", true);
-        _animator.SetBool("Run", false);
-        _animator.SetBool("BoxingIdle", false);
+        _characterAnimator.SetBool("Punch", true);
+        _characterAnimator.SetBool("Run", false);
+        _characterAnimator.SetBool("BoxingIdle", false);
     }
 
     private void BoxingIdle()
     {
-        _animator.SetBool("BoxingIdle", true);
-        _animator.SetBool("Punch", false);
-        _animator.SetBool("Run", false);
+        _characterAnimator.SetBool("BoxingIdle", true);
+        _characterAnimator.SetBool("Punch", false);
+        _characterAnimator.SetBool("Run", false);
     }
 
     private void EnemyBoxing()
@@ -487,7 +482,7 @@ public class PlayerController : MonoBehaviour
 
     private void HitAnimation()
     {
-        _animator.SetBool("Hit", true);
+        _characterAnimator.SetBool("Hit", true);
     }
 
     private void EnemyHitAnimation()
