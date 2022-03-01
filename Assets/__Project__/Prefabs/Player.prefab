@@ -590,25 +590,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5de12b82d621904787d4f6fd9069128, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterSpeed: 25
+  CharacterSpeed: 35
   WallHealth: 4
   _sideMovementSensitivity: 5
   _sideMovementLerpSpeed: 10
   _userInterface: {fileID: 0}
-  _maxExtend: 5
-  _currentExtend: 2
   extendBar: {fileID: 0}
   CharacterHealth: 2
   EnemyHealth: 3
   _heightValue: {x: 0.1, y: 0.1, z: 0.1}
   _stickmanFightPos: {x: 0, y: 0, z: 997}
-  _punchPower: 0.2
+  _punchPower: 0.8
   _healthValue: 0.1
   _sideMovementRoot: {fileID: 3427810006634709803}
   _leftLimit: {fileID: 9173393077533424723}
   _rightLimit: {fileID: 5003547705232043459}
   _camera: {fileID: 1147814931}
-  _fightCamera: {fileID: 0}
   _stickmanExtend: {fileID: 424287450139412089}
   _characterAnimator: {fileID: 2127669525067693327}
   _enemyAnimator: {fileID: 0}

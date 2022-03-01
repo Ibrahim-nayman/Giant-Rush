@@ -25,6 +25,9 @@ public class GameManager : MonoBehaviour
     public GameObject PlayGameMenu;
     public GameObject WinMenu;
     public GameObject LoseMenu;
+    public GameObject GreenStickmanImage;
+    public GameObject OrangeStickmanImage;
+    public GameObject YellowStickmanImage;
 
     public int LoopAfter;
 
@@ -61,6 +64,7 @@ public class GameManager : MonoBehaviour
     
     public void Win()
     {
+        StartCoroutine(MenuDelay(WinMenu, 2f));
         CurrentGameState = GameState.WinGame;
         MMVibrationManager.TransientHaptic(1, 0.1f, true, this);
         PlayerPrefs.SetInt("fakeLevelNumber", PlayerPrefs.GetInt("fakeLevelNumber", 1) + 1);
@@ -73,15 +77,13 @@ public class GameManager : MonoBehaviour
         {
             PlayerPrefs.SetInt("reachedLevel", LoopAfter + 1);
         }
-
-        StartCoroutine(MenuDelay(WinMenu, 3f));
     }
 
     public void Lose()
     {
+        StartCoroutine(MenuDelay(LoseMenu, 2f));
         CurrentGameState = GameState.LoseGame;
         MMVibrationManager.TransientHaptic(1, 0.1f, true, this);
-        StartCoroutine(MenuDelay(LoseMenu, 3f));
     }
 
     public void PlayGame()

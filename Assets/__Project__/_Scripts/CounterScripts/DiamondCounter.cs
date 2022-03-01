@@ -13,6 +13,6 @@ public class DiamondCounter : MonoBehaviour
 
     private void Update()
     {
-        Score.text = "" + Value;
+        Score.text = (PlayerPrefs.GetInt("Diamond") + Value).ToString();
     }
 }

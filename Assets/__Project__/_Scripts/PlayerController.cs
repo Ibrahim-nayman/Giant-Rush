@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
+using System.Numerics;
 using NaughtyAttributes;
 using RayFire;
 using UnityEngine;
+using Quaternion = UnityEngine.Quaternion;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
@@ -12,8 +14,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField, BoxGroup("Game Settings")] private float WallHealth = 4f;
     [SerializeField, BoxGroup("Game Settings")] private float _sideMovementSensitivity = 5f;
     [SerializeField, BoxGroup("Game Settings")] private float _sideMovementLerpSpeed = 10f;
-    
-    [SerializeField, BoxGroup("UI Settings")] private GameObject _userInterface;
     
     [SerializeField, BoxGroup("Slider Settings")] public ExtendBar extendBar;
     
@@ -27,7 +27,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField, BoxGroup("Setup")] private Transform _sideMovementRoot;
     [SerializeField, BoxGroup("Setup")] private Transform _leftLimit, _rightLimit;
     [SerializeField, BoxGroup("Setup")] private Camera _camera;
-    [SerializeField, BoxGroup("Setup")] private GameObject _fightCamera;
     [SerializeField, BoxGroup("Setup")] private Transform _stickmanExtend;
 
     [SerializeField, BoxGroup("Animators")] private Animator _characterAnimator;
@@ -37,10 +36,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField, BoxGroup("Player Material")] private Color _yellowColor;
     [SerializeField, BoxGroup("Player Material")] private Color _greenColor;
     [SerializeField, BoxGroup("Player Material")] private Color _orangeColor;
-
-    [SerializeField, BoxGroup("Stickman Image")] private GameObject _greenStickmanImage;
-    [SerializeField, BoxGroup("Stickman Image")] private GameObject _orangeStickmanImage;
-    [SerializeField, BoxGroup("Stickman Image")] private GameObject _yellowStickmanImage;
 
     private Vector2 MousePositionCm
     {
@@ -66,10 +61,10 @@ public class PlayerController : MonoBehaviour
     private bool _isCharacterInteract;
     private bool _isFirstRunStarted;
     private bool _isFirstBoxingIdle;
-    private bool _isCharacterDeath;
     private bool _isEnemyFight;
     private bool _isCharacterPunching;
     private bool _isCharacterHit;
+    private bool _diamondInfoSaved;
 
 
     private void Start()
@@ -101,13 +96,13 @@ public class PlayerController : MonoBehaviour
                 break;
             case GameState.FightGame:
                 FightGameState();
+                GameManager.Instance.PlayGameMenu.SetActive(false);
                 break;
             case GameState.WinGame:
                 WinAnimation();
-                _userInterface.SetActive(false);
+                SaveDiamondInfo();
                 break;
             case GameState.LoseGame:
-                _userInterface.SetActive(false);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -197,27 +192,27 @@ public class PlayerController : MonoBehaviour
         {
             transform.gameObject.tag = "OrangeStickman";
             _colorMat.color = _orangeColor;
-            _greenStickmanImage.SetActive(false);
-            _orangeStickmanImage.SetActive(true);
-            _yellowStickmanImage.SetActive(false);
+            GameManager.Instance.GreenStickmanImage.SetActive(false);
+            GameManager.Instance.OrangeStickmanImage.SetActive(true);
+            GameManager.Instance.YellowStickmanImage.SetActive(false);
         }
 
         if (other.CompareTag("ColorChangeYellow"))
         {
             transform.gameObject.tag = "YellowStickman";
             _colorMat.color = _yellowColor;
-            _greenStickmanImage.SetActive(false);
-            _orangeStickmanImage.SetActive(false);
-            _yellowStickmanImage.SetActive(true);
+            GameManager.Instance.GreenStickmanImage.SetActive(false);
+            GameManager.Instance.OrangeStickmanImage.SetActive(false);
+            GameManager.Instance.YellowStickmanImage.SetActive(true);
         }
 
         if (other.CompareTag("ColorChangeGreen"))
         {
             transform.gameObject.tag = "GreenStickman";
             _colorMat.color = _greenColor;
-            _greenStickmanImage.SetActive(true);
-            _orangeStickmanImage.SetActive(false);
-            _yellowStickmanImage.SetActive(false);
+            GameManager.Instance.GreenStickmanImage.SetActive(true);
+            GameManager.Instance.OrangeStickmanImage.SetActive(false);
+            GameManager.Instance.YellowStickmanImage.SetActive(false);
         }
 
         #endregion
@@ -258,7 +253,7 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Diamond"))
         {
             other.gameObject.SetActive(false);
-            DiamondCounter.Value += 1;
+            DiamondCounter.Value++;
         }
     }
 
@@ -269,25 +264,25 @@ public class PlayerController : MonoBehaviour
         if (_colorMat.color == _orangeColor)
         {
             gameObject.tag = "OrangeStickman";
-            _greenStickmanImage.SetActive(false);
-            _orangeStickmanImage.SetActive(true);
-            _yellowStickmanImage.SetActive(false);
+            GameManager.Instance.GreenStickmanImage.SetActive(false);
+            GameManager.Instance.OrangeStickmanImage.SetActive(true);
+            GameManager.Instance.YellowStickmanImage.SetActive(false);
         }
 
         if (_colorMat.color == _greenColor)
         {
             gameObject.tag = "GreenStickman";
-            _greenStickmanImage.SetActive(true);
-            _orangeStickmanImage.SetActive(false);
-            _yellowStickmanImage.SetActive(false);
+            GameManager.Instance.GreenStickmanImage.SetActive(true);
+            GameManager.Instance.OrangeStickmanImage.SetActive(false);
+            GameManager.Instance.YellowStickmanImage.SetActive(false);
         }
 
         if (_colorMat.color == _yellowColor)
         {
             gameObject.tag = "YellowStickman";
-            _greenStickmanImage.SetActive(false);
-            _orangeStickmanImage.SetActive(false);
-            _yellowStickmanImage.SetActive(true);
+            GameManager.Instance.GreenStickmanImage.SetActive(false);
+            GameManager.Instance.OrangeStickmanImage.SetActive(false);
+            GameManager.Instance.YellowStickmanImage.SetActive(true);
         }
     }
 
@@ -310,7 +305,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.75f);
         _isCharacterInteract = false;
         other.transform.parent.GetComponentInChildren<RayfireRigid>().Initialize();
-        CharacterSpeed = 25;
+        CharacterSpeed = 35;
         CharacterHealth -= _healthValue * 10;
         _stickmanExtend.localScale -= _heightValue * 10;
         RunAfterWallAnimation();
@@ -386,7 +381,11 @@ public class PlayerController : MonoBehaviour
 
     public void FightGameState()
     {
-        _stickmanExtend.position = _stickmanFightPos;
+        gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, _stickmanFightPos, 2 * Time.deltaTime);
+        _sideMovementRoot.transform.localPosition = Vector3.Lerp(_sideMovementRoot.transform.localPosition, Vector3.zero, 2* Time.deltaTime);
+        _camera.transform.localPosition = Vector3.Lerp(_camera.transform.localPosition, new Vector3(15, 8, 1.5f), 2 * Time.deltaTime);
+        _camera.transform.localRotation = Quaternion.Lerp(_camera.transform.localRotation, Quaternion.Euler(15, -90, 0), 2 * Time.deltaTime);
+        
         CharacterSpeed = 0;
         _isCharacterInteract = true;
 
@@ -395,17 +394,15 @@ public class PlayerController : MonoBehaviour
             _isFirstBoxingIdle = true;
             BoxingIdle();
         }
-
-        _fightCamera.SetActive(true);
-
+        
         StartCoroutine(FightPunchDelay());
 
         StartCoroutine(EnemyFightPunchDelay());
 
         if (EnemyHealth <= 0)
         {
-            GameManager.Instance.Win();
             EnemyDeathAnimation();
+            GameManager.Instance.Win();
         }
 
         if (CharacterHealth <= 0)
@@ -493,5 +490,14 @@ public class PlayerController : MonoBehaviour
     private void EnemyHitAnimation()
     {
         _enemyAnimator.SetBool("EnemyHit", true);
+    }
+
+    private void SaveDiamondInfo()
+    {
+        if (!_diamondInfoSaved)
+        {
+            _diamondInfoSaved = true;
+            PlayerPrefs.SetInt("Diamond",DiamondCounter.Value + PlayerPrefs.GetInt("Diamond"));
+        }
     }
 }
