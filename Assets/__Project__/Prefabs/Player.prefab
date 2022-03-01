@@ -594,13 +594,16 @@ MonoBehaviour:
   WallHealth: 4
   _sideMovementSensitivity: 5
   _sideMovementLerpSpeed: 10
+  _userInterface: {fileID: 0}
+  _maxExtend: 5
+  _currentExtend: 2
+  extendBar: {fileID: 0}
   CharacterHealth: 2
   EnemyHealth: 3
-  _heightValue: {x: 0.2, y: 0.2, z: 0.2}
+  _heightValue: {x: 0.1, y: 0.1, z: 0.1}
   _stickmanFightPos: {x: 0, y: 0, z: 997}
   _punchPower: 0.2
-  _healthValue: 0.2
-  _userInterface: {fileID: 0}
+  _healthValue: 0.1
   _sideMovementRoot: {fileID: 3427810006634709803}
   _leftLimit: {fileID: 9173393077533424723}
   _rightLimit: {fileID: 5003547705232043459}
@@ -1373,11 +1376,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1696612609887212849, guid: 23b1d8402e912094092212d41ca2a185, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1696612609887212849, guid: 23b1d8402e912094092212d41ca2a185, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3416144686030705047, guid: 23b1d8402e912094092212d41ca2a185, type: 3}
       propertyPath: m_Pivot.x
@@ -1470,6 +1473,10 @@ PrefabInstance:
     - target: {fileID: 6299181885912850585, guid: 23b1d8402e912094092212d41ca2a185, type: 3}
       propertyPath: m_Name
       value: HealthSlider
+      objectReference: {fileID: 0}
+    - target: {fileID: 6299181885912850585, guid: 23b1d8402e912094092212d41ca2a185, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 23b1d8402e912094092212d41ca2a185, type: 3}

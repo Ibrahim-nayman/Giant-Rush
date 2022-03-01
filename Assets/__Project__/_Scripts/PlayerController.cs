@@ -15,13 +15,11 @@ public class PlayerController : MonoBehaviour
     
     [SerializeField, BoxGroup("UI Settings")] private GameObject _userInterface;
     
-    [SerializeField, BoxGroup("Slider Settings")] private int _maxExtend;
-    [SerializeField, BoxGroup("Slider Settings")] private int _currentExtend;
     [SerializeField, BoxGroup("Slider Settings")] public ExtendBar extendBar;
     
     [SerializeField, BoxGroup("Stickman Fight Settings")] private float CharacterHealth = 2f;
     [SerializeField, BoxGroup("Stickman Fight Settings")] private float EnemyHealth = 3f;
-    [SerializeField, BoxGroup("Stickman Fight Settings")] private Vector3 _heightValue = new Vector3(0.2f,0.2f,0.2f);
+    [SerializeField, BoxGroup("Stickman Fight Settings")] private Vector3 _heightValue = new Vector3(0.1f,0.1f,0.1f);
     [SerializeField, BoxGroup("Stickman Fight Settings")] private Vector3 _stickmanFightPos = new Vector3();
     [SerializeField, BoxGroup("Stickman Fight Settings")] private float _punchPower = 0.2f;
     [SerializeField, BoxGroup("Stickman Fight Settings")] private float _healthValue = 0.2f;
@@ -77,14 +75,8 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         DiamondCounter.Value = 0;
-        
         ScoreCounter.ScoreValue = 0;
-        
         SetLastTag();
-        
-        _currentExtend = _maxExtend;
-        
-        extendBar.SetMaxExtend(_maxExtend);
     }
 
     #region GameState
@@ -92,9 +84,9 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         RestartGame();
-        
-        extendBar.SetExtend(_currentExtend);
 
+        extendBar.ExtendSliderBar.value = Mathf.Lerp(extendBar.ExtendSliderBar.value, _stickmanExtend.localScale.y, 2 * Time.deltaTime);
+        
         switch (GameManager.Instance.CurrentGameState)
         {
             case GameState.BeforeStartGame:
@@ -188,6 +180,7 @@ public class PlayerController : MonoBehaviour
             if (CharacterHealth > WallHealth)
             {
                 StartCoroutine(WallPunch(other));
+                
             }
             else
             {
@@ -237,7 +230,6 @@ public class PlayerController : MonoBehaviour
             CharacterHealth += _healthValue;
             _stickmanExtend.transform.localScale += _heightValue;
             ScoreCounter.ScoreValue += 1;
-            TakeExtend(5);
         }
 
         if (!gameObject.CompareTag(other.tag) && other.CompareTag("OrangeStickman"))
@@ -390,11 +382,6 @@ public class PlayerController : MonoBehaviour
             _stickmanExtend.localScale = new Vector3(5f, 5f, 5f);
             CharacterHealth = 5f;
         }
-    }
-
-    public void TakeExtend(int extend)
-    {
-        _currentExtend += extend;
     }
 
     public void FightGameState()

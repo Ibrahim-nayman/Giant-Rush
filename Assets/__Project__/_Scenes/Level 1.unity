@@ -2686,10 +2686,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6796628773563233209}
     - target: {fileID: 1696314725, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
-      propertyPath: _maxExtend
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 1696314725, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
       propertyPath: _fightCamera
       value: 
       objectReference: {fileID: 735498750}
@@ -2713,18 +2709,6 @@ PrefabInstance:
       propertyPath: _yellowStickmanImage
       value: 
       objectReference: {fileID: 149736078}
-    - target: {fileID: 940576345035351380, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 940576345035351380, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5615212011187605756, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8592876449704432112, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -2926,10 +2910,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1647010821467513811, guid: b9892115ec8c88242ae61ce13bed55d5, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1647010821467513811, guid: b9892115ec8c88242ae61ce13bed55d5, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
@@ -3020,10 +3000,6 @@ PrefabInstance:
     - target: {fileID: 6213840746909537915, guid: b9892115ec8c88242ae61ce13bed55d5, type: 3}
       propertyPath: m_Name
       value: ExtendSlider
-      objectReference: {fileID: 0}
-    - target: {fileID: 8655292967231740587, guid: b9892115ec8c88242ae61ce13bed55d5, type: 3}
-      propertyPath: m_Value
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b9892115ec8c88242ae61ce13bed55d5, type: 3}
