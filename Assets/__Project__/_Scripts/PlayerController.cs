@@ -463,4 +463,11 @@ public class PlayerController : MonoBehaviour
         _enemyAnimator.SetBool("Idle",true);
         _enemyAnimator.SetBool("Fight",false);
     }
+
+    private void HitAnimation()
+    {
+        _animator.SetBool("Hit",true);
+        _animator.SetBool("Punch",false);
+        _animator.SetBool("BoxingIdle",false);
+    }
 }
