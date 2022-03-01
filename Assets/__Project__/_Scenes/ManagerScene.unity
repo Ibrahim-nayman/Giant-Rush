@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 149736079}
   - component: {fileID: 149736081}
   - component: {fileID: 149736080}
+  - component: {fileID: 149736082}
   m_Layer: 0
   m_Name: YellowStickmanImage
   m_TagString: Untagged
@@ -157,7 +158,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: -450, y: 350}
+  m_AnchoredPosition: {x: -458.7, y: 350}
   m_SizeDelta: {x: 140, y: 361}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &149736080
@@ -198,6 +199,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 149736078}
   m_CullTransparentMesh: 1
+--- !u!114 &149736082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149736078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
+  m_EffectDistance: {x: 5, y: -5}
+  m_UseGraphicAlpha: 1
 --- !u!1 &168470883
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,6 +225,7 @@ GameObject:
   - component: {fileID: 168470884}
   - component: {fileID: 168470886}
   - component: {fileID: 168470885}
+  - component: {fileID: 168470887}
   m_Layer: 0
   m_Name: GreenStickmanImage
   m_TagString: Untagged
@@ -232,7 +249,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: -450, y: 350}
+  m_AnchoredPosition: {x: -458.7, y: 350}
   m_SizeDelta: {x: 140, y: 361}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &168470885
@@ -273,6 +290,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 168470883}
   m_CullTransparentMesh: 1
+--- !u!114 &168470887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 168470883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
+  m_EffectDistance: {x: 5, y: -5}
+  m_UseGraphicAlpha: 1
 --- !u!1 &457445626
 GameObject:
   m_ObjectHideFlags: 0
@@ -731,6 +763,7 @@ GameObject:
   - component: {fileID: 1419706415}
   - component: {fileID: 1419706417}
   - component: {fileID: 1419706416}
+  - component: {fileID: 1419706418}
   m_Layer: 0
   m_Name: OrangeStickmanImage
   m_TagString: Untagged
@@ -754,7 +787,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: -450, y: 350}
+  m_AnchoredPosition: {x: -458.7, y: 350}
   m_SizeDelta: {x: 140, y: 361}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1419706416
@@ -795,6 +828,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1419706414}
   m_CullTransparentMesh: 1
+--- !u!114 &1419706418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419706414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
+  m_EffectDistance: {x: 5, y: -5}
+  m_UseGraphicAlpha: 1
 --- !u!1 &1504908610
 GameObject:
   m_ObjectHideFlags: 0
@@ -861,15 +909,15 @@ RectTransform:
   m_GameObject: {fileID: 1705288240}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1200751427}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: -470, y: 175}
-  m_SizeDelta: {x: 494, y: 505}
+  m_AnchoredPosition: {x: -495, y: 175}
+  m_SizeDelta: {x: 128, y: 111}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1705288242
 MonoBehaviour:
@@ -891,7 +939,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9542e12ea602b8c4abcbb381645b0fdc, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8661490d01fe14ee3a29db3d39f643fd, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

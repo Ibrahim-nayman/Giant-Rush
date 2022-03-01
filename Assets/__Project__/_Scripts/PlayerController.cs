@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Numerics;
+using DG.Tweening;
 using NaughtyAttributes;
 using RayFire;
 using UnityEngine;
@@ -30,6 +31,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField, BoxGroup("Setup")] private Transform _leftLimit, _rightLimit;
     [SerializeField, BoxGroup("Setup")] private Camera _camera;
     [SerializeField, BoxGroup("Setup")] private Transform _stickmanExtend;
+    [SerializeField, BoxGroup("Setup")] private GameObject _crown;
+    
     [SerializeField, BoxGroup("Slider")] private GameObject _characterHealthSlider;
     [SerializeField, BoxGroup("Slider")] private GameObject _enemyHealthSlider;
 
@@ -82,11 +85,6 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         RestartGame();
-
-        extendBar.ExtendSliderBar.value = Mathf.Lerp(extendBar.ExtendSliderBar.value, _stickmanExtend.localScale.y, 2 * Time.deltaTime);
-        characterHealthBar.HealthSliderBar.value = Mathf.Lerp(characterHealthBar.HealthSliderBar.value, CharacterHealth,2 * Time.deltaTime);
-        enemyHealthBar.HealthSliderBar.value = Mathf.Lerp(enemyHealthBar.HealthSliderBar.value, EnemyHealth,2 * Time.deltaTime);
-        
         
         switch (GameManager.Instance.CurrentGameState)
         {
@@ -99,8 +97,11 @@ public class PlayerController : MonoBehaviour
                 HandleSideMovement();
                 HandleInput();
                 CharacterMaxHpAndExtend();
+                CrownActive();
+                SliderLerp();
                 break;
             case GameState.FightGame:
+                SliderLerp();
                 FightGameState();
                 GameManager.Instance.PlayGameMenu.SetActive(false);
                 break;
@@ -313,6 +314,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.75f);
         _isCharacterInteract = false;
         other.transform.parent.GetComponentInChildren<RayfireRigid>().Initialize();
+        _camera.transform.DOShakePosition(0.75f);
         CharacterSpeed = 35;
         CharacterHealth -= _healthValue * 10;
         _stickmanExtend.localScale -= _heightValue * 10;
@@ -526,5 +528,24 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         _characterHealthSlider.SetActive(true);
         _enemyHealthSlider.SetActive(true);
+    }
+
+    private void CrownActive()
+    {
+        if (CharacterHealth >= 4.5f)
+        {
+            _crown.SetActive(true);
+        }
+        else
+        {
+            _crown.SetActive(false);
+        }
+    }
+
+    private void SliderLerp()
+    {
+        extendBar.ExtendSliderBar.value = Mathf.Lerp(extendBar.ExtendSliderBar.value, _stickmanExtend.localScale.y, 2 * Time.deltaTime);
+        characterHealthBar.HealthSliderBar.value = Mathf.Lerp(characterHealthBar.HealthSliderBar.value, CharacterHealth,2 * Time.deltaTime);
+        enemyHealthBar.HealthSliderBar.value = Mathf.Lerp(enemyHealthBar.HealthSliderBar.value, EnemyHealth,2 * Time.deltaTime);
     }
 }
