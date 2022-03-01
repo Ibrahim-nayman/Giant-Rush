@@ -57,18 +57,20 @@ public class PlayerController : MonoBehaviour
     private Vector2 _inputDrag;
 
     private Vector2 _previousMousePosition;
-    
+
     private float LeftLimitX => _leftLimit.localPosition.x;
     private float RightLimitX => _rightLimit.localPosition.x;
 
     private float _sideMovementTarget = 0f;
-    
+
     private bool _isCharacterInteract;
     private bool _isFirstRunStarted;
     private bool _isFirstBoxingIdle;
     private bool _isCharacterDeath;
     private bool _isEnemyFight;
     private bool _isCharacterPunching;
+    private bool _isCharacterHit;
+
 
     private void Start()
     {
@@ -82,7 +84,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         RestartGame();
-        
+
         switch (GameManager.Instance.CurrentGameState)
         {
             case GameState.BeforeStartGame:
@@ -167,8 +169,8 @@ public class PlayerController : MonoBehaviour
 
         if (other.CompareTag("Obstacle"))
         {
-            StartCoroutine(DeathDelay());
-            //TODO Ölüm animasyonu koyulacak ve retry tuşuna basınca yukarıdaki kodlar çalışacak.
+            DeathAnimation();
+            GameManager.Instance.Lose();
         }
 
         if (other.CompareTag("Wall"))
@@ -312,43 +314,52 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && !_isCharacterPunching)
         {
+            _isCharacterHit = true;
             _isCharacterPunching = true;
             PunchAnimation();
+
             yield return new WaitForSeconds(0.5f);
+
             EnemyHitAnimation();
-            yield return new WaitForSeconds(0.5f);
-            _enemyAnimator.SetBool("EnemyHit",false);
             EnemyHealth -= _punchPower;
+
+            yield return new WaitForSeconds(0.5f);
+
+            _enemyAnimator.SetBool("EnemyHit", false);
             BoxingIdle();
-            yield return new WaitForSeconds(1.2f);
+
+            yield return new WaitForSeconds(0.5f);
+            _isCharacterHit = false;
             _isCharacterPunching = false;
         }
     }
 
     private IEnumerator EnemyFightPunchDelay()
     {
-        if (!_isEnemyFight)
+        if (!_isEnemyFight && !_isCharacterHit)
         {
             _isEnemyFight = true;
             EnemyBoxing();
-            yield return new WaitForSeconds(0.5f);
-            HitAnimation();
-            yield return new WaitForSeconds(0.5f);
-            _animator.SetBool("Hit",false);
-            CharacterHealth -= _punchPower;
-            EnemyIdle();
-            yield return new WaitForSeconds(1f);
-            _isEnemyFight = false;
-        }
-    }
 
-    private IEnumerator DeathDelay()
-    {
-        if (!_isCharacterDeath)
-        {
-            _isCharacterDeath = true;
-            DeathAnimation();
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.5f);
+
+            if (!_isCharacterHit)
+            {
+                HitAnimation();
+                CharacterHealth -= _punchPower;
+            }
+            
+            yield return new WaitForSeconds(0.5f);
+            
+            if (!_isCharacterHit)
+            {
+                _animator.SetBool("Hit", false);
+                EnemyIdle();
+            }
+
+            yield return new WaitForSeconds(1f);
+
+            _isEnemyFight = false;
         }
     }
 
@@ -386,7 +397,7 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(FightPunchDelay());
 
         StartCoroutine(EnemyFightPunchDelay());
-        
+
         if (EnemyHealth <= 0)
         {
             GameManager.Instance.Win();
@@ -399,7 +410,7 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.Lose();
         }
     }
-    
+
     private void IdleAnimation()
     {
         _animator.SetBool("Idle", true);
@@ -412,7 +423,7 @@ public class PlayerController : MonoBehaviour
         _animator.SetBool("Idle", false);
         _animator.SetBool("Punch", false);
     }
-    
+
     private void FirstRunAnimation()
     {
         if (!_isFirstRunStarted)
@@ -420,7 +431,7 @@ public class PlayerController : MonoBehaviour
             _isFirstRunStarted = true;
             _animator.SetBool("Run", true);
             _animator.SetBool("Idle", false);
-            _animator.SetBool("Win",false);
+            _animator.SetBool("Win", false);
         }
     }
 
@@ -428,14 +439,14 @@ public class PlayerController : MonoBehaviour
     {
         _animator.SetBool("Death", true);
         _animator.SetBool("Run", false);
-        _animator.SetBool("BoxingIdle",false);
+        _animator.SetBool("BoxingIdle", false);
     }
 
     private void EnemyDeathAnimation()
     {
-        _enemyAnimator.SetBool("Death",true);
-        _enemyAnimator.SetBool("Idle",false);
-        _enemyAnimator.SetBool("Fight",false);
+        _enemyAnimator.SetBool("Death", true);
+        _enemyAnimator.SetBool("Idle", false);
+        _enemyAnimator.SetBool("Fight", false);
     }
 
     private void WinAnimation()
@@ -460,24 +471,23 @@ public class PlayerController : MonoBehaviour
 
     private void EnemyBoxing()
     {
-        _enemyAnimator.SetBool("Fight",true);
-        _enemyAnimator.SetBool("Idle",false);
+        _enemyAnimator.SetBool("Fight", true);
+        _enemyAnimator.SetBool("Idle", false);
     }
 
     private void EnemyIdle()
     {
-        _enemyAnimator.SetBool("Idle",true);
-        _enemyAnimator.SetBool("Fight",false);
+        _enemyAnimator.SetBool("Idle", true);
+        _enemyAnimator.SetBool("Fight", false);
     }
 
     private void HitAnimation()
     {
-        _animator.SetBool("Hit",true);
+        _animator.SetBool("Hit", true);
     }
 
     private void EnemyHitAnimation()
     {
-        _enemyAnimator.SetBool("EnemyHit",true);
-        
+        _enemyAnimator.SetBool("EnemyHit", true);
     }
 }
