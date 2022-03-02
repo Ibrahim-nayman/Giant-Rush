@@ -45,6 +45,23 @@ public class PlayerController : MonoBehaviour
     [SerializeField, BoxGroup("Player Material")] private Color _greenColor;
     [SerializeField, BoxGroup("Player Material")] private Color _orangeColor;
 
+    [SerializeField, BoxGroup("Player Fx")] private ParticleSystem _greenBubble;
+    [SerializeField, BoxGroup("Player Fx")] private ParticleSystem _orangeBubble;
+    [SerializeField, BoxGroup("Player Fx")] private ParticleSystem _yellowBubble;
+    [SerializeField, BoxGroup("Player Fx")] private ParticleSystem _orangeSparkle;
+    [SerializeField, BoxGroup("Player Fx")] private ParticleSystem _greenSparkle;
+    [SerializeField, BoxGroup("Player Fx")] private ParticleSystem _yellowSparkle;
+    [SerializeField, BoxGroup("Player Fx")] private ParticleSystem _diamondExplosion;
+
+    public StartingColor CurrentColor;
+    
+    public enum StartingColor
+    {
+        Green,
+        Yellow,
+        Orange
+    }
+    
     private Vector2 MousePositionCm
     {
         get
@@ -74,8 +91,14 @@ public class PlayerController : MonoBehaviour
     private bool _isCharacterHit;
     private bool _diamondInfoSaved;
 
+    private void OnValidate()
+    {
+        StartingColorSelect();
+    }
+
     private void Start()
     {
+        StartingColorSelect();
         DiamondCounter.Value = 0;
         ScoreCounter.ScoreValue = 0;
         SetLastTag();
@@ -179,8 +202,8 @@ public class PlayerController : MonoBehaviour
         {
             DeathAnimation();
             GameManager.Instance.Lose();
-            MMVibrationManager.Haptic(HapticTypes.Failure);
-            _camera.transform.DOShakePosition(0.5f);
+            //MMVibrationManager.Haptic(HapticTypes.Failure);
+            //_camera.transform.DOShakePosition(0.5f);
         }
 
         if (other.CompareTag("Wall"))
@@ -211,6 +234,7 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.OrangeStickmanImage.SetActive(true);
             GameManager.Instance.YellowStickmanImage.SetActive(false);
             MMVibrationManager.Haptic(HapticTypes.MediumImpact);
+            _orangeBubble.Play();
         }
 
         if (other.CompareTag("ColorChangeYellow"))
@@ -221,6 +245,7 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.OrangeStickmanImage.SetActive(false);
             GameManager.Instance.YellowStickmanImage.SetActive(true);
             MMVibrationManager.Haptic(HapticTypes.MediumImpact);
+            _yellowBubble.Play();
         }
 
         if (other.CompareTag("ColorChangeGreen"))
@@ -231,6 +256,7 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.OrangeStickmanImage.SetActive(false);
             GameManager.Instance.YellowStickmanImage.SetActive(false);
             MMVibrationManager.Haptic(HapticTypes.MediumImpact);
+            _greenBubble.Play();
         }
 
         #endregion
@@ -244,8 +270,21 @@ public class PlayerController : MonoBehaviour
             _stickmanExtend.transform.localScale += _heightValue;
             ScoreCounter.ScoreValue += 1;
             MMVibrationManager.Haptic(HapticTypes.LightImpact);
-        }
 
+            if (gameObject.CompareTag("GreenStickman"))
+            {
+                _greenSparkle.Play();
+            }
+            if (gameObject.CompareTag("OrangeStickman"))
+            {
+                _orangeSparkle.Play();
+            }
+            if (gameObject.CompareTag("YellowStickman"))
+            {
+                _yellowSparkle.Play();
+            }
+        }
+        
         if (!gameObject.CompareTag(other.tag) && other.CompareTag("OrangeStickman"))
         {
             other.gameObject.SetActive(false);
@@ -276,8 +315,10 @@ public class PlayerController : MonoBehaviour
         {
             other.gameObject.SetActive(false);
             DiamondCounter.Value++;
+            _diamondExplosion.Play();
         }
     }
+
 
     #region SetLastTag
 
@@ -400,10 +441,10 @@ public class PlayerController : MonoBehaviour
             CharacterHealth = 2f;
         }
 
-        if (_stickmanExtend.localScale.y >= 5f)
+        if (_stickmanExtend.localScale.y >= 4f)
         {
-            _stickmanExtend.localScale = new Vector3(5f, 5f, 5f);
-            CharacterHealth = 5f;
+            _stickmanExtend.localScale = new Vector3(4f, 4f, 4f);
+            CharacterHealth = 4f;
         }
     }
 
@@ -550,7 +591,7 @@ public class PlayerController : MonoBehaviour
 
     private void CrownActive()
     {
-        if (CharacterHealth >= 4.5f)
+        if (CharacterHealth >= 3.6f)
         {
             _crown.SetActive(true);
         }
@@ -565,5 +606,27 @@ public class PlayerController : MonoBehaviour
         extendBar.ExtendSliderBar.value = Mathf.Lerp(extendBar.ExtendSliderBar.value, _stickmanExtend.localScale.y, 2 * Time.deltaTime);
         characterHealthBar.HealthSliderBar.value = Mathf.Lerp(characterHealthBar.HealthSliderBar.value, CharacterHealth,2 * Time.deltaTime);
         enemyHealthBar.HealthSliderBar.value = Mathf.Lerp(enemyHealthBar.HealthSliderBar.value, EnemyHealth,2 * Time.deltaTime);
+    }
+
+
+    public void StartingColorSelect()
+    {
+        switch (CurrentColor)
+        {
+            case StartingColor.Green:
+                gameObject.tag = "GreenStickman";
+                _colorMat.color = _greenColor;
+                break;
+            case StartingColor.Yellow:
+                gameObject.tag = "YellowStickman";
+                _colorMat.color = _yellowColor;
+                break;
+            case StartingColor.Orange:
+                gameObject.tag = "OrangeStickman";
+                _colorMat.color = _orangeColor;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
 }

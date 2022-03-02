@@ -496,7 +496,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6735464600968583579}
   m_Layer: 0
-  m_Name: 13451_Golden_Crown_v1_L2
+  m_Name: Crown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
